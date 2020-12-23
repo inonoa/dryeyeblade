@@ -53,6 +53,7 @@ MonoBehaviour:
   attack: {fileID: 2933936693068834616}
   chaseSpeed: 3
   wanderSpeed: 2
+  spriteRenderer: {fileID: 3947111934771966888}
 --- !u!212 &3947111934771966888
 SpriteRenderer:
   m_ObjectHideFlags: 0

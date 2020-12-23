@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using DG.Tweening;
 using UniRx;
 using UnityEngine;
@@ -8,7 +9,7 @@ using Random = UnityEngine.Random;
 
 public class Zako : MonoBehaviour, IDamageable, IDoOnTimeStopped
 {
-    enum State{ Wandering, ChaseHero, Attack }
+    enum State{ Wandering, ChaseHero, Attack, Dead }
     [SerializeField] State state = State.Wandering;
     
     Dir8 wanderDir;
@@ -17,6 +18,7 @@ public class Zako : MonoBehaviour, IDamageable, IDoOnTimeStopped
     [SerializeField] ZakoAttack attack;
     [SerializeField] float chaseSpeed = 3;
     [SerializeField] float wanderSpeed = 2;
+    [SerializeField] SpriteRenderer spriteRenderer;
 
     Hero targetHero;
 
@@ -26,7 +28,7 @@ public class Zako : MonoBehaviour, IDamageable, IDoOnTimeStopped
         
         DOVirtual.DelayedCall
         (
-            Random.Range(0, 0.2f),
+            Random.Range(0, 2f),
             () => Observable
                   .Interval(TimeSpan.FromSeconds(2))
                   .Where(_ => state == State.Wandering)
@@ -80,18 +82,26 @@ public class Zako : MonoBehaviour, IDamageable, IDoOnTimeStopped
             }
         }
         break;
-        case State.Attack:
-        {
-            //
-        }
-        break;
         }
     }
     
 
     public void Damage(float damage)
     {
-        Destroy(gameObject);
+        state = State.Dead;
+        StartCoroutine(Blink(() => Destroy(gameObject)));
+    }
+
+    IEnumerator Blink(Action onEnd)
+    {
+        foreach (var _ in Enumerable.Range(0, 3))
+        {
+            spriteRenderer.enabled = false;
+            yield return new WaitForSeconds(0.13f);
+            spriteRenderer.enabled = true;
+            yield return new WaitForSeconds(0.13f);
+        }
+        onEnd.Invoke();
     }
 
     public void OnTimeStopped()

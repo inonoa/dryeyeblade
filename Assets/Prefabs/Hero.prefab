@@ -131,21 +131,11 @@ MonoBehaviour:
     Prefab: {fileID: 0}
     PrefabModificationsReferencedUnityObjects: []
     PrefabModifications: []
-    SerializationNodes:
-    - Name: hits
-      Entry: 7
-      Data: 0|System.Collections.Generic.List`1[[IDamageable, Assembly-CSharp]],
-        mscorlib
-    - Name: 
-      Entry: 12
-      Data: 0
-    - Name: 
-      Entry: 13
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
+    SerializationNodes: []
   collier: {fileID: 3047888428841101534}
+  damageEffectPrefab: {fileID: 5937418758955274382, guid: e93ccd96d120c4c468338c1bba31dddf,
+    type: 3}
+  hits: []
 --- !u!114 &3047888428841101528
 MonoBehaviour:
   m_ObjectHideFlags: 0

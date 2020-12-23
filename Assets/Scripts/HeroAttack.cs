@@ -11,7 +11,10 @@ public class HeroAttack : SerializedMonoBehaviour
 {
     [SerializeField] Collider2D collier;
     
-    [SerializeField, ReadOnly] List<IDamageable> hits = new List<IDamageable>();
+    //これViewっしょ…………
+    [SerializeField] DamageEffect damageEffectPrefab;
+    
+    [SerializeField, ReadOnly] List<AttackHitInfo> hits = new List<AttackHitInfo>();
 
     HeroParams param;
     Hero hero;
@@ -19,6 +22,7 @@ public class HeroAttack : SerializedMonoBehaviour
     public void Init(Hero hero, HeroParams param)
     {
         this.param = param;
+        this.hero = hero;
         hero.EyesAreOpen
             .Subscribe(open =>
             {
@@ -55,7 +59,12 @@ public class HeroAttack : SerializedMonoBehaviour
     {
         if (other.CompareTag("Damageable"))
         {
-            hits.Add(other.GetComponentInParent<IDamageable>());
+            hits.Add(new AttackHitInfo
+            (
+                other.ClosestPoint(hero.transform.position),
+                hero.KeyDirection, 
+                other.GetComponentInParent<IDamageable>()
+            ));
         }
     }
 
@@ -69,8 +78,32 @@ public class HeroAttack : SerializedMonoBehaviour
 
     void OnEyesOpen()
     {
-        hits.ForEach(hit => hit.Damage(param.NormalDamage));
-        hits = new List<IDamageable>();
+        hits.ForEach(hit =>
+        {
+            hit.Target.Damage(param.NormalDamage);
+            Instantiate(damageEffectPrefab, hit.HitPos, Quaternion.identity)
+                .Play(hit.AttackDir);
+        });
+        hits = new List<AttackHitInfo>();
+    }
+}
+
+[Serializable]
+public class AttackHitInfo
+{
+    [SerializeField, ReadOnly] Vector2 hitPos;
+    [SerializeField, ReadOnly] Dir8 attackDir;
+    [SerializeField, ReadOnly] IDamageable target;
+
+    public Vector2 HitPos => hitPos;
+    public Dir8 AttackDir => attackDir;
+    public IDamageable Target => target;
+
+    public AttackHitInfo(Vector2 pos, Dir8 attackDir, IDamageable target)
+    {
+        this.hitPos = pos;
+        this.attackDir = attackDir;
+        this.target = target;
     }
 }
 

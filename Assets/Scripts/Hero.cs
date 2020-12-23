@@ -17,7 +17,8 @@ public class Hero : MonoBehaviour
     public HeroLife Life => life;
 
     ReactiveProperty<Dir8> _KeyDirection = new ReactiveProperty<Dir8>(Dir8.D);
-    public IObservable<Dir8> KeyDirection => _KeyDirection;
+    public IObservable<Dir8> KeyDirectionSet => _KeyDirection;
+    public Dir8 KeyDirection => _KeyDirection.Value;
 
     Vector2 speed = Vector2.zero;
 
