@@ -20,6 +20,8 @@
 **/.idea/**/contentModel.xml
 **/.idea/**/modules.xml
 
+/[Aa]ssets/unity-aseprite-importer-master/
+
 /[Aa]ssets/[Pp]lugins/
 
 /[Ll]ibrary/

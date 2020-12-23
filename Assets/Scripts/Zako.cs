@@ -22,7 +22,7 @@ public class Zako : MonoBehaviour, IDamageable, IDoOnTimeStopped
 
     void Start()
     {
-        wanderDir = (Dir8) Random.Range(0, 8);
+        wanderDir = Dir8Extension.Random();
         
         DOVirtual.DelayedCall
         (
@@ -30,7 +30,7 @@ public class Zako : MonoBehaviour, IDamageable, IDoOnTimeStopped
             () => Observable
                   .Interval(TimeSpan.FromSeconds(2))
                   .Where(_ => state == State.Wandering)
-                  .Subscribe(_ => wanderDir = (Dir8) Random.Range(0, 8))
+                  .Subscribe(_ => wanderDir = Dir8Extension.Random())
                   .AddTo(this)
         );
     }

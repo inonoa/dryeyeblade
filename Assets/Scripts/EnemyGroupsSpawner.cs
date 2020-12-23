@@ -2,11 +2,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Timers;
 using DG.Tweening;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-public class EnemyGroupsSpawner : MonoBehaviour
+public class EnemyGroupsSpawner : MonoBehaviour, IDoOnTimeStopped
 {
     [SerializeField] EnemyGroup[] groupSources;
 
@@ -39,14 +40,12 @@ public class EnemyGroupsSpawner : MonoBehaviour
 
     IEnumerator Spawn(EnemyGroup[] spawns)
     {
-        float timeAtStart = Time.time;
-        
-        yield return new WaitForSeconds(5);
+        float time = 0;
+
+        while ((time += Time.deltaTime) < 5) yield return null;
         
         while(true)
         {
-            float time = Time.time - timeAtStart;
-            
             float timeNormalized = Mathf.InverseLerp
             (
                 WhenSpawnSourcesBandStartToSlide,
@@ -61,13 +60,29 @@ public class EnemyGroupsSpawner : MonoBehaviour
             float intervalMin = Mathf.Clamp(Mathf.Lerp(intervalAt0s.min, intervalAt100s.min, time / 100), 3, 100);
             float intervalMax = Mathf.Clamp(Mathf.Lerp(intervalAt0s.max, intervalAt100s.max, time / 100), 3, 100);
             float nextInterval = Random.Range(intervalMin, intervalMax);
+            
             // 場に敵が全くいなくなったら時間を待たずに次を出したい気持ちがある
-            yield return new WaitForSeconds(nextInterval);
+            float t = 0;
+            while ((t += Time.deltaTime) < nextInterval) yield return null;
         }
     }
 
     public void StopSpawn()
     {
         StopCoroutine(currentSpawns);
+    }
+
+    public void OnTimeStopped()
+    {
+        if(currentSpawns == null) return;
+        
+        StopCoroutine(currentSpawns);
+    }
+
+    public void OnTimeRestarted()
+    {
+        if(currentSpawns == null) return;
+        
+        StartCoroutine(currentSpawns);
     }
 }

@@ -1,0 +1,54 @@
+fileFormatVersion: 2
+guid: 1e9bf8f0cfd1ba1459335dfb82992aa6
+ScriptedImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 2
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+  script: {fileID: 11500000, guid: 25a63327f814cd04cbdbd7e8ae6dfcf9, type: 3}
+  textureSettings:
+    textureType: 8
+    pixelsPerUnit: 15
+    mirror: 0
+    transparencyMode: 0
+    transparentColor: {r: 1, g: 0, b: 1, a: 1}
+    meshType: 1
+    extrudeEdges: 1
+    spritePivot: {x: 0.5, y: 0.5}
+    generatePhysics: 1
+    wrapMode: 1
+    filterMode: 0
+    tileSize: {x: 32, y: 32}
+    tilePadding: {x: 0, y: 0}
+    tileOffset: {x: 0, y: 0}
+  animationSettings:
+  - animationName: u
+    loopTime: 1
+    about: "Animation Type:\tForward\r\nAnimation:\tFrom: 0; To: 1"
+  - animationName: run_u
+    loopTime: 1
+    about: "Animation Type:\tForward\r\nAnimation:\tFrom: 2; To: 5"
+  - animationName: l
+    loopTime: 1
+    about: "Animation Type:\tForward\r\nAnimation:\tFrom: 6; To: 7"
+  - animationName: run_l
+    loopTime: 1
+    about: "Animation Type:\tForward\r\nAnimation:\tFrom: 8; To: 9"
+  - animationName: d
+    loopTime: 1
+    about: "Animation Type:\tForward\r\nAnimation:\tFrom: 10; To: 11"
+  - animationName: run_d
+    loopTime: 1
+    about: "Animation Type:\tForward\r\nAnimation:\tFrom: 12; To: 15"
+  - animationName: r
+    loopTime: 1
+    about: "Animation Type:\tForward\r\nAnimation:\tFrom: 16; To: 17"
+  - animationName: run_r
+    loopTime: 1
+    about: "Animation Type:\tForward\r\nAnimation:\tFrom: 18; To: 19"
+  atlas: {instanceID: 0}
+  importType: 0
+  bindType: 0
+  emptyTileBehaviour: 0

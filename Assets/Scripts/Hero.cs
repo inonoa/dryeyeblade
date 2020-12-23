@@ -15,7 +15,10 @@ public class Hero : MonoBehaviour
 
     public HeroEye Eye => eye;
     public HeroLife Life => life;
-    
+
+    ReactiveProperty<Dir8> _KeyDirection = new ReactiveProperty<Dir8>(Dir8.D);
+    public IObservable<Dir8> KeyDirection => _KeyDirection;
+
     Vector2 speed = Vector2.zero;
 
     bool canMove = true;
@@ -54,6 +57,8 @@ public class Hero : MonoBehaviour
         
         float horInput  = Input.GetAxisRaw("Horizontal");
         float vertInput = Input.GetAxisRaw("Vertical");
+        
+        _KeyDirection.Value = new Vector2(horInput, vertInput).ToDir8();
         
         if (horInput == 0 && vertInput == 0)
         {

@@ -255,6 +255,8 @@ GameObject:
   - component: {fileID: 3047888430029443258}
   - component: {fileID: 3047888430029443259}
   - component: {fileID: 3047888430029443252}
+  - component: {fileID: 3640711842881298810}
+  - component: {fileID: 6507560892453216765}
   m_Layer: 0
   m_Name: Hero
   m_TagString: Hero
@@ -317,7 +319,8 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 053d2dfbebd9f56439e253fcb6d73024, type: 3}
+  m_Sprite: {fileID: -3143747720611569955, guid: 1e9bf8f0cfd1ba1459335dfb82992aa6,
+    type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -395,3 +398,36 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.2
+--- !u!95 &3640711842881298810
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3047888430029443262}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: ec42a28b9d2cf254a95b187705893b23, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &6507560892453216765
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3047888430029443262}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1d0083e5301c4fa2a6d71a29c769c9ba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hero: {fileID: 3047888430029443257}
+  animator: {fileID: 3640711842881298810}

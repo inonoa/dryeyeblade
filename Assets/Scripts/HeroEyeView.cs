@@ -14,6 +14,7 @@ public class HeroEyeView : MonoBehaviour
     {
         Hero.CurrentSet.Subscribe(hero =>
         {
+            if(hero == null) return;
             eye = hero.Eye;
             hero.Eye.IsOpenChanged
                 .Subscribe(open => { blind.enabled = !open; })
