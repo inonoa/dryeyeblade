@@ -12,11 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 60889fba7eab45179e54fef5a0d84f87, type: 3}
   m_Name: HeroParams
   m_EditorClassIdentifier: 
-  _SpeedMax: 5
-  _RunForce: 70
-  _Resistance: 40
+  _SpeedMax: 3
+  _RunForce: 50
+  _Resistance: 30
   _EyeKey: 122
   _AttackKey: 120
   _NormalDamage: 1
   _CoolTime: 2
   _EyeClosedTimeMax: 3
+  _DebugMuteki: 0

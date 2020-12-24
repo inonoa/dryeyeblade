@@ -20,4 +20,13 @@ public class HeroParams : ScriptableObject
     public float NormalDamage => _NormalDamage;
     public float CoolTime => _CoolTime;
     public float EyeClosedTimeMax => _EyeClosedTimeMax;
+    
+#if UNITY_EDITOR
+    
+    [Space(10)]
+    [SerializeField] bool _DebugMuteki = false;
+
+    public bool DebugMuteki => _DebugMuteki;
+    
+#endif
 }
