@@ -8,9 +8,10 @@ public class EnemiesTimeChanger : MonoBehaviour
     {
         Hero.CurrentSet.Subscribe(hero =>
         {
-            hero.Eye.IsOpenChanged.Where(open => open)
+            if(hero == null) return;
+            hero.Eye.IsOpen.Where(open => open)
                 .Subscribe(_ => RestartTime());
-            hero.Eye.IsOpenChanged.Where(open => !open)
+            hero.Eye.IsOpen.Where(open => !open)
                 .Subscribe(_ => StopTime());
         });
     }

@@ -6,13 +6,22 @@ using UnityEngine;
 public class HeroAttackView : MonoBehaviour
 {
     [SerializeField] HeroAttack attack;
-    [SerializeField] SpriteRenderer spriteRenderer;
+    [SerializeField] Animator effectAnimPrefab;
+    [SerializeField] float effectPositionOffset = 0.3f;
 
     void Start()
     {
         attack.OnAttack
-            .Subscribe(_ => spriteRenderer.enabled = true);
-        attack.OnAttackFinished
-            .Subscribe(_ => spriteRenderer.enabled = false);
+            .Subscribe(hero =>
+            {
+                var effect = Instantiate
+                (
+                    effectAnimPrefab,
+                    transform.position + effectPositionOffset * hero.EyeDirection.Value.ToVec2().Vec3(),
+                    Quaternion.identity
+                );
+                effect.Play("attackEffect_" + hero.EyeDirection.Value.ToSimpleStr());
+                DOVirtual.DelayedCall(1, () => Destroy(effect.gameObject));
+            });
     }
 }

@@ -8,13 +8,14 @@ public class GameCycleManager : MonoBehaviour
 {
     [SerializeField] EnemyGroupsSpawner enemyGroupsSpawner;
     [SerializeField] Hero heroPrefab;
+    [SerializeField] TitleScene titleScene;
     [SerializeField] ResultScene resultScene;
 
     Hero lastHero;
 
     void Start()
     {
-        StartGame();
+        titleScene.StartGame.Subscribe(_ => StartGame());
         resultScene.Restart.Subscribe(_ => StartGame());
     }
 

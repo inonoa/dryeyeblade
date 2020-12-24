@@ -47,6 +47,8 @@ public static class Dir8Extension
         return Dir8.L;
     }
 
+    public static float ToAngleDeg(this Dir8 dir) => Vector2.SignedAngle(Vector2.right, dir.ToVec2());
+
     public static Dir8 Random()
     {
         return (Dir8) UnityEngine.Random.Range(1, 9);
@@ -60,4 +62,6 @@ public static class Dir8Extension
     {
         return dir == Dir8.L || dir == Dir8.LD || dir == Dir8.LU;
     }
+
+    public static string ToSimpleStr(this Dir8 dir) => dir.ToString().ToLower();
 }

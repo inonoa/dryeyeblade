@@ -16,7 +16,7 @@ public class HeroEyeView : MonoBehaviour
         {
             if(hero == null) return;
             eye = hero.Eye;
-            hero.Eye.IsOpenChanged
+            hero.Eye.IsOpen
                 .Subscribe(open => { blind.enabled = !open; })
                 .AddTo(this);
         });
@@ -27,7 +27,7 @@ public class HeroEyeView : MonoBehaviour
         if(eye is null) return;
         if(!eye.gameObject.activeInHierarchy) return;
         
-        if (eye.IsOpen)
+        if (eye.IsOpen.Value)
         {
             eyeSlider.value = Mathf.Clamp01(eye.SecondsFromOpen / param.CoolTime);
         }

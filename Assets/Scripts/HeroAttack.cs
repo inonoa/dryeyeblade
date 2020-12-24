@@ -27,16 +27,15 @@ public class HeroAttack : SerializedMonoBehaviour
             .Subscribe(open =>
             {
                 if(open) OnEyesOpen();
-                _CanAttack = !open;
             })
             .AddTo(this);
     }
 
-    bool _CanAttack = false;
-    bool CanAttack => _CanAttack;
+    public bool IsAttacking { get; private set; } = false;
+    bool CanAttack => !hero.EyesAreOpen.Value && !IsAttacking;
     
-    Subject<Unit> _OnAttack = new Subject<Unit>();
-    public IObservable<Unit> OnAttack => _OnAttack;
+    Subject<Hero> _OnAttack = new Subject<Hero>();
+    public IObservable<Hero> OnAttack => _OnAttack;
 
     void Start()
     {
@@ -46,32 +45,35 @@ public class HeroAttack : SerializedMonoBehaviour
             .ThrottleFirst(TimeSpan.FromSeconds(0.5f))
             .Subscribe(_ => Attack())
             .AddTo(this);
+
+        collier.OnTriggerEnter2DAsObservable()
+            .Where(other => other.CompareTag("Damageable"))
+            .Subscribe(other =>
+            {
+                hits.Add(new AttackHitInfo
+                (
+                    other.ClosestPoint(hero.transform.position),
+                    hero.EyeDirection.Value,
+                    other.GetComponentInParent<IDamageable>()
+                ));
+            })
+            .AddTo(this);
     }
 
     void Attack()
     {
+        IsAttacking = true;
         collier.enabled = true;
+        collier.transform.rotation = Quaternion.Euler(0, 0, hero.EyeDirection.Value.ToAngleDeg());
         DOVirtual.DelayedCall(0.3f, FinishAttack);
-        _OnAttack.OnNext(Unit.Default);
-    }
-
-    void OnTriggerEnter2D(Collider2D other)
-    {
-        if (other.CompareTag("Damageable"))
-        {
-            hits.Add(new AttackHitInfo
-            (
-                other.ClosestPoint(hero.transform.position),
-                hero.KeyDirection, 
-                other.GetComponentInParent<IDamageable>()
-            ));
-        }
+        _OnAttack.OnNext(hero);
     }
 
     Subject<Unit> _OnAttackFinished = new Subject<Unit>();
     public Subject<Unit> OnAttackFinished => _OnAttackFinished;
     void FinishAttack()
     {
+        IsAttacking = false;
         collier.enabled = false;
         _OnAttackFinished.OnNext(Unit.Default);
     }

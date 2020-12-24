@@ -7,16 +7,15 @@ public class HeroEye : MonoBehaviour
     [SerializeField] HeroParams param;
     
     ReactiveProperty<bool> _IsOpen = new ReactiveProperty<bool>(true);
-    public IObservable<bool> IsOpenChanged => _IsOpen;
-    public bool IsOpen => _IsOpen.Value;
+    public IReadOnlyReactiveProperty<bool> IsOpen => _IsOpen;
 
     public float SecondsFromOpen{ get; private set; } = 100;
     public float SecondsFromClose{ get; private set; } = 0;
 
     void Update()
     {
-        if(IsOpen) UpdateOpen();
-        else       UpdateClosed();
+        if(IsOpen.Value) UpdateOpen();
+        else             UpdateClosed();
     }
 
     void UpdateOpen()

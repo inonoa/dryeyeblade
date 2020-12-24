@@ -12,7 +12,7 @@ public class HeroMainView : MonoBehaviour
 
     void Start()
     {
-        hero.KeyDirectionSet
+        hero.KeyDirection
             .Subscribe(dir =>
             {
                 if (dir == Dir8.None)

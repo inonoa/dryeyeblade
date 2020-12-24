@@ -16,15 +16,16 @@ public class Hero : MonoBehaviour
     public HeroEye Eye => eye;
     public HeroLife Life => life;
 
-    ReactiveProperty<Dir8> _KeyDirection = new ReactiveProperty<Dir8>(Dir8.D);
-    public IObservable<Dir8> KeyDirectionSet => _KeyDirection;
-    public Dir8 KeyDirection => _KeyDirection.Value;
+    ReactiveProperty<Dir8> _KeyDirection = new ReactiveProperty<Dir8>(Dir8.None);
+    public IReadOnlyReactiveProperty<Dir8> KeyDirection => _KeyDirection;
+    public IReadOnlyReactiveProperty<Dir8> EyeDirection { get; private set; }
+
 
     Vector2 speed = Vector2.zero;
 
     bool canMove = true;
 
-    public IObservable<bool> EyesAreOpen => eye.IsOpenChanged;
+    public IReadOnlyReactiveProperty<bool> EyesAreOpen => eye.IsOpen;
 
     Subject<Unit> _OnDie = new Subject<Unit>();
     public IObservable<Unit> OnDie => _OnDie;
@@ -33,6 +34,12 @@ public class Hero : MonoBehaviour
     {
         attack.Init(this, param);
         _Current.Value = this;
+
+        ReactiveProperty<Dir8> eyeDir = new ReactiveProperty<Dir8>(Dir8.D);
+        KeyDirection
+            .Where(key => key != Dir8.None)
+            .Subscribe(key => eyeDir.Value = key);
+        EyeDirection = eyeDir;
     }
 
     void Start()
@@ -61,6 +68,8 @@ public class Hero : MonoBehaviour
         
         _KeyDirection.Value = new Vector2(horInput, vertInput).ToDir8();
         
+        if(attack.IsAttacking) return;
+        
         if (horInput == 0 && vertInput == 0)
         {
             float magResistance = param.Resistance * Time.deltaTime;
@@ -82,6 +91,9 @@ public class Hero : MonoBehaviour
 
     void FixedUpdate()
     {
+        if(!canMove) return;
+        if(attack.IsAttacking) return;
+        
         rigidBody.MovePosition(transform.position + speed.Vec3() * Time.fixedDeltaTime);
     }
     
