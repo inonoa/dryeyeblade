@@ -20,4 +20,4 @@ MonoBehaviour:
   _NormalDamage: 1
   _CoolTime: 2
   _EyeClosedTimeMax: 3
-  _DebugMuteki: 0
+  _DebugMuteki: 1
