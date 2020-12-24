@@ -13,6 +13,8 @@ GameObject:
   - component: {fileID: 3947111934771966888}
   - component: {fileID: 8765323201748891482}
   - component: {fileID: 878676241292221885}
+  - component: {fileID: 1938456130975233215}
+  - component: {fileID: 6311312223974734037}
   m_Layer: 0
   m_Name: Zako
   m_TagString: Damageable
@@ -53,7 +55,6 @@ MonoBehaviour:
   attack: {fileID: 2933936693068834616}
   chaseSpeed: 3
   wanderSpeed: 2
-  spriteRenderer: {fileID: 3947111934771966888}
 --- !u!212 &3947111934771966888
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -141,6 +142,40 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
+--- !u!114 &1938456130975233215
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3947111934771966895}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aeda6fae8b844196babd69948522fb9c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  zako: {fileID: 3947111934771966889}
+  animator: {fileID: 6311312223974734037}
+  spriteRenderer: {fileID: 3947111934771966888}
+--- !u!95 &6311312223974734037
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3947111934771966895}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: f0b1ab1cce3735247926d4faefd51704, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &4513818223192361620
 GameObject:
   m_ObjectHideFlags: 0

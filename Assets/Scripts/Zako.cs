@@ -3,38 +3,46 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using DG.Tweening;
+using Sirenix.OdinInspector;
 using UniRx;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
 public class Zako : MonoBehaviour, IDamageable, IDoOnTimeStopped
 {
-    enum State{ Wandering, ChaseHero, Attack, Dead }
-    [SerializeField] State state = State.Wandering;
+    public enum EState{ Wandering, ChaseHero, Attack, Dead }
+    [SerializeField, ReadOnly] EState state = EState.Wandering;
+    public EState State => state;
     
-    Dir8 wanderDir;
+    ReactiveProperty<Dir8> _WanderDir = new ReactiveProperty<Dir8>();
+    public Dir8 WanderDir => _WanderDir.Value;
+    public IObservable<Dir8> WanderDirSet => _WanderDir;
 
     [SerializeField] Rigidbody2D rigidBody;
     [SerializeField] ZakoAttack attack;
     [SerializeField] float chaseSpeed = 3;
     [SerializeField] float wanderSpeed = 2;
-    [SerializeField] SpriteRenderer spriteRenderer;
 
     Hero targetHero;
 
     void Start()
     {
-        wanderDir = Dir8Extension.Random();
+        ChangeDir();
         
         DOVirtual.DelayedCall
         (
             Random.Range(0, 2f),
             () => Observable
                   .Interval(TimeSpan.FromSeconds(2))
-                  .Where(_ => state == State.Wandering)
-                  .Subscribe(_ => wanderDir = Dir8Extension.Random())
+                  .Where(_ => state == EState.Wandering)
+                  .Subscribe(_ => ChangeDir())
                   .AddTo(this)
         );
+    }
+
+    void ChangeDir()
+    {
+        _WanderDir.Value = Dir8Extension.Random();
     }
 
     void OnTriggerEnter2D(Collider2D other)
@@ -43,42 +51,44 @@ public class Zako : MonoBehaviour, IDamageable, IDoOnTimeStopped
 
         targetHero = other.GetComponentInParent<Hero>();
         
-        if (state == State.Wandering)
+        if (state == EState.Wandering)
         {
-            state = State.ChaseHero;
+            state = EState.ChaseHero;
         }
     }
     void OnTriggerExit2D(Collider2D other)
     {
         if(! other.CompareTag("Hero")) return;
         
-        if (state == State.ChaseHero)
+        if (state == EState.ChaseHero)
         {
-            state = State.Wandering;
+            state = EState.Wandering;
         }
     }
     
 
+    public Vector2 RunDir { get; private set; }
     void FixedUpdate()
     {
         switch (state)
         {
-        case State.Wandering:
+        case EState.Wandering:
         {
-            rigidBody.MovePosition(transform.position + wanderDir.ToVec2().Vec3() * (wanderSpeed * Time.deltaTime));
+            rigidBody.MovePosition(transform.position + WanderDir.ToVec2().Vec3() * (wanderSpeed * Time.deltaTime));
         }
         break;
-        case State.ChaseHero:
+        case EState.ChaseHero:
         {
             Vector2 thisToHero = targetHero.transform.position - this.transform.position;
-            rigidBody.MovePosition(transform.position + thisToHero.normalized.Vec3() * (chaseSpeed * Time.deltaTime));
+            RunDir = thisToHero.normalized;
+            rigidBody.MovePosition(transform.position + RunDir.Vec3() * (chaseSpeed * Time.deltaTime));
 
             if (attack.CanAttack)
             {
                 attack.Attack()
                     .Delay(TimeSpan.FromSeconds(1))
-                    .Subscribe(_ => state = State.ChaseHero);
-                state = State.Attack;
+                    .Subscribe(_ => state = EState.ChaseHero);
+                state = EState.Attack;
             }
         }
         break;
@@ -86,22 +96,20 @@ public class Zako : MonoBehaviour, IDamageable, IDoOnTimeStopped
     }
     
 
+    Subject<Unit> _OnDamaged = new Subject<Unit>();
+    public IObservable<Unit> OnDamaged => _OnDamaged;
     public void Damage(float damage)
     {
-        state = State.Dead;
-        StartCoroutine(Blink(() => Destroy(gameObject)));
+        state = EState.Dead;
+        _OnDamaged.OnNext(Unit.Default);
     }
 
-    IEnumerator Blink(Action onEnd)
+    /// <summary>
+    /// だいぶん気持ち悪い(呼び損ねる)
+    /// </summary>
+    public void OnDamageDisplayEnded()
     {
-        foreach (var _ in Enumerable.Range(0, 3))
-        {
-            spriteRenderer.enabled = false;
-            yield return new WaitForSeconds(0.13f);
-            spriteRenderer.enabled = true;
-            yield return new WaitForSeconds(0.13f);
-        }
-        onEnd.Invoke();
+        Destroy(gameObject);
     }
 
     public void OnTimeStopped()

@@ -51,4 +51,13 @@ public static class Dir8Extension
     {
         return (Dir8) UnityEngine.Random.Range(1, 9);
     }
+
+    public static bool IsR(this Dir8 dir)
+    {
+        return dir == Dir8.R || dir == Dir8.RD || dir == Dir8.RU;
+    }
+    public static bool IsL(this Dir8 dir)
+    {
+        return dir == Dir8.L || dir == Dir8.LD || dir == Dir8.LU;
+    }
 }
