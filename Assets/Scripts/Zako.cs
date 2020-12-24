@@ -22,6 +22,8 @@ public class Zako : MonoBehaviour, IDamageable, IDoOnTimeStopped
     [SerializeField] ZakoAttack attack;
     [SerializeField] float chaseSpeed = 3;
     [SerializeField] float wanderSpeed = 2;
+    [SerializeField] int _Score = 100;
+    public int Score => _Score;
 
     Hero targetHero;
 
@@ -98,10 +100,14 @@ public class Zako : MonoBehaviour, IDamageable, IDoOnTimeStopped
 
     Subject<Unit> _OnDamaged = new Subject<Unit>();
     public IObservable<Unit> OnDamaged => _OnDamaged;
+    
+    Subject<Unit> _OnDeath = new Subject<Unit>();
+    public IObservable<Unit> OnDeath => _OnDeath;
     public void Damage(float damage)
     {
         state = EState.Dead;
         _OnDamaged.OnNext(Unit.Default);
+        _OnDeath.OnNext(Unit.Default);
     }
 
     /// <summary>

@@ -1,10 +1,20 @@
 ﻿using System;
+using System.Collections.Generic;
+using UniRx;
 using UnityEngine;
 
 public class EnemyGroup : MonoBehaviour
 {
-    [SerializeField] float _Difficulty;
-    public float Difficulty => _Difficulty;
+    IDamageable[] _Enemies;
+    public IReadOnlyList<IDamageable> Enemies
+    {
+        get
+        {
+            if (_Enemies == null) _Enemies = GetComponentsInChildren<IDamageable>();
+            return _Enemies;
+        }
+    }
+    
     void Update()
     {
         if(transform.childCount == 0) Destroy(gameObject);

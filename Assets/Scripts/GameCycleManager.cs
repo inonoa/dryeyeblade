@@ -7,6 +7,7 @@ using Sirenix.OdinInspector;
 public class GameCycleManager : MonoBehaviour
 {
     [SerializeField] EnemyGroupsSpawner enemyGroupsSpawner;
+    [SerializeField] ScoreCounter scoreCounter;
     [SerializeField] Hero heroPrefab;
     [SerializeField] TitleScene titleScene;
     [SerializeField] ResultScene resultScene;
@@ -22,6 +23,7 @@ public class GameCycleManager : MonoBehaviour
     void StartGame()
     {
         enemyGroupsSpawner.StartSpawn();
+        scoreCounter.Reset();
         
         if(lastHero != null) Destroy(lastHero.gameObject);
         lastHero = Instantiate(heroPrefab);

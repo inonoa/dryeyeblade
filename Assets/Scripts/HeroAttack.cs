@@ -112,4 +112,6 @@ public class AttackHitInfo
 public interface IDamageable
 {
     void Damage(float damage);
+    int Score { get; }
+    IObservable<Unit> OnDeath { get; }
 }

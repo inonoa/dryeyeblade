@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Timers;
 using DG.Tweening;
+using UniRx;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -19,6 +20,9 @@ public class EnemyGroupsSpawner : MonoBehaviour, IDoOnTimeStopped
     [SerializeField] int WhenSpawnSourcesBandEndSliding;
 
     IEnumerator currentSpawns;
+    
+    Subject<EnemyGroup> _Spawned = new Subject<EnemyGroup>();
+    public IObservable<EnemyGroup> Spawned => _Spawned;
 
     [Serializable]
     struct MinMaxFloat
@@ -55,7 +59,7 @@ public class EnemyGroupsSpawner : MonoBehaviour, IDoOnTimeStopped
             int indexMin = (int) Mathf.Lerp(0, spawns.Length - spawnSourcesBandWidth, timeNormalized);
             int indexMax = indexMin + spawnSourcesBandWidth - 1;
             int nextIndex = Random.Range(indexMin, indexMax + 1);
-            Instantiate(spawns[nextIndex], transform);
+            _Spawned.OnNext(Instantiate(spawns[nextIndex], transform));
 
             float intervalMin = Mathf.Clamp(Mathf.Lerp(intervalAt0s.min, intervalAt100s.min, time / 100), 3, 100);
             float intervalMax = Mathf.Clamp(Mathf.Lerp(intervalAt0s.max, intervalAt100s.max, time / 100), 3, 100);
