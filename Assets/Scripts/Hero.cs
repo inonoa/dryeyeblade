@@ -1,8 +1,9 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using DG.Tweening;
+using Sirenix.OdinInspector;
 using UniRx;
-using UniRx.Triggers;
 using UnityEngine;
 
 public class Hero : MonoBehaviour
@@ -13,6 +14,22 @@ public class Hero : MonoBehaviour
     [SerializeField] Rigidbody2D rigidBody;
     [SerializeField] HeroEye eye;
 
+    public HeroParams Param => param;
+    
+    public enum EState{ Normal, Attacking, Damaged, Dead }
+
+    ReactiveProperty<EState> _State = new ReactiveProperty<EState>(EState.Normal);
+    public IObservable<Unit> OnDamaged 
+        => _State
+            .Where(state => state == EState.Damaged || state == EState.Dead)
+            .Select(_ => Unit.Default);
+    public IObservable<Unit> OnDeath
+        => _State
+            .Where(state => state == EState.Dead)
+            .Select(_ => Unit.Default);
+
+    public IReadOnlyReactiveProperty<EState> State => _State;
+
     public HeroEye Eye => eye;
     public HeroLife Life => life;
 
@@ -21,14 +38,11 @@ public class Hero : MonoBehaviour
     public IReadOnlyReactiveProperty<Dir8> EyeDirection { get; private set; }
 
 
-    Vector2 speed = Vector2.zero;
+    [SerializeField] Vector2 speed = Vector2.zero;
 
-    bool canMove = true;
+    [SerializeField, ReadOnly] bool canMove = true;
 
     public IReadOnlyReactiveProperty<bool> EyesAreOpen => eye.IsOpen;
-
-    Subject<Unit> _OnDie = new Subject<Unit>();
-    public IObservable<Unit> OnDie => _OnDie;
 
     void Awake()
     {
@@ -40,18 +54,32 @@ public class Hero : MonoBehaviour
             .Where(key => key != Dir8.None)
             .Subscribe(key => eyeDir.Value = key);
         EyeDirection = eyeDir;
+
+        attack.OnAttack.Subscribe(_ => _State.Value = EState.Attacking);
+        attack.OnAttackFinished.Subscribe(_ => _State.Value = EState.Normal);
     }
 
     void Start()
     {
-        life.Life
-            .Where(val => val == 0)
-            .Subscribe(_ =>
+        life.Life.Subscribe(lf =>
+        {
+            if (lf == life.LifeMax) return;
+            if (lf == 0)
             {
                 canMove = false;
                 speed = Vector2.zero;
-                _OnDie.OnNext(Unit.Default);
-            });
+                rigidBody.constraints = RigidbodyConstraints2D.FreezeAll;
+                _State.Value = EState.Dead;
+                return;
+            }
+
+            rigidBody
+                .DOMove(- EyeDirection.Value.ToVec2() * param.KnockBackDistance, param.StunTime)
+                .SetRelative()
+                .SetEase(Ease.OutQuad)
+                .OnComplete(() => _State.Value = EState.Normal);
+            _State.Value = EState.Damaged;
+        });
     }
 
     void Update()
@@ -68,7 +96,7 @@ public class Hero : MonoBehaviour
         
         _KeyDirection.Value = new Vector2(horInput, vertInput).ToDir8();
         
-        if(attack.IsAttacking) return;
+        if(_State.Value != EState.Normal) return;
         
         if (horInput == 0 && vertInput == 0)
         {
@@ -93,9 +121,12 @@ public class Hero : MonoBehaviour
     {
         if(!canMove) return;
         if(attack.IsAttacking) return;
-        
+        if(_State.Value == EState.Damaged) return;
+
         rigidBody.MovePosition(transform.position + speed.Vec3() * Time.fixedDeltaTime);
     }
+
+    public bool CanBeDamaged() => ! (_State.Value == EState.Damaged || _State.Value == EState.Dead);
     
     static ReactiveProperty<Hero> _Current = new ReactiveProperty<Hero>();
     public static IObservable<Hero> CurrentSet => _Current;

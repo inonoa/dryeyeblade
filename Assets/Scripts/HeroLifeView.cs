@@ -11,6 +11,6 @@ public class HeroLifeView : MonoBehaviour
         if(Hero.Current is null) return;
         
         var life = Hero.Current.Life;
-        text.text = $"LIFE: {life.LifeValue} / {life.LifeMax}";
+        text.text = $"LIFE: {life.Life.Value} / {life.LifeMax}";
     }
 }

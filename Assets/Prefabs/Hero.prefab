@@ -108,6 +108,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _LifeMax: 3
   param: {fileID: 11400000, guid: 7fe0fc4a3d982304aa7a0a2f61b0af31, type: 2}
+  hero: {fileID: 3047888430029443257}
 --- !u!58 &3047888428732004320
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -305,6 +306,8 @@ MonoBehaviour:
   life: {fileID: 3047888428732004325}
   rigidBody: {fileID: 3047888430029443258}
   eye: {fileID: 3047888430029443259}
+  speed: {x: 0, y: 0}
+  canMove: 1
 --- !u!50 &3047888430029443258
 Rigidbody2D:
   serializedVersion: 4
@@ -398,3 +401,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hero: {fileID: 3047888430029443257}
   animator: {fileID: 3640711842881298810}
+  spriteRenderer: {fileID: 3047888430029443263}

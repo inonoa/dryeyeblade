@@ -24,5 +24,14 @@ public class ResultScene : MonoBehaviour
         gameObject.SetActive(true);
     }
 
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            gameObject.SetActive(false);
+            _Restart.OnNext(Unit.Default);
+        }
+    }
+
     public IObservable<Unit> Restart => _Restart;
 }

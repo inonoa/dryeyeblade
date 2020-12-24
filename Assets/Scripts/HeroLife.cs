@@ -9,10 +9,10 @@ public class HeroLife : MonoBehaviour
     public int LifeMax => _LifeMax;
 
     ReactiveProperty<int> _Life;
-    public IObservable<int> Life => _Life;
-    public int LifeValue => _Life.Value;
+    public IReadOnlyReactiveProperty<int> Life => _Life;
 
     [SerializeField] HeroParams param;
+    [SerializeField] Hero hero;
 
     void Awake()
     {
@@ -22,7 +22,8 @@ public class HeroLife : MonoBehaviour
     void OnTriggerEnter2D(Collider2D other)
     {
         if(! other.CompareTag("EnemyAttack")) return;
-        if(LifeValue == 0) return;
+        if(Life.Value == 0) return;
+        if(!hero.CanBeDamaged()) return;
         
 #if UNITY_EDITOR
         if(param.DebugMuteki) return;

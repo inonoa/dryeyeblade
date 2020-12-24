@@ -27,27 +27,39 @@ ScriptedImporter:
   - animationName: u
     loopTime: 1
     about: "Animation Type:\tForward\r\nAnimation:\tFrom: 0; To: 1"
+  - animationName: damage_u
+    loopTime: 1
+    about: "Animation Type:\tForward\r\nAnimation:\tFrom: 2; To: 2"
   - animationName: run_u
     loopTime: 1
-    about: "Animation Type:\tForward\r\nAnimation:\tFrom: 2; To: 5"
+    about: "Animation Type:\tForward\r\nAnimation:\tFrom: 3; To: 6"
   - animationName: l
     loopTime: 1
-    about: "Animation Type:\tForward\r\nAnimation:\tFrom: 6; To: 7"
+    about: "Animation Type:\tForward\r\nAnimation:\tFrom: 7; To: 8"
+  - animationName: damage_l
+    loopTime: 1
+    about: "Animation Type:\tForward\r\nAnimation:\tFrom: 9; To: 9"
   - animationName: run_l
     loopTime: 1
-    about: "Animation Type:\tForward\r\nAnimation:\tFrom: 8; To: 9"
+    about: "Animation Type:\tForward\r\nAnimation:\tFrom: 10; To: 11"
   - animationName: d
     loopTime: 1
-    about: "Animation Type:\tForward\r\nAnimation:\tFrom: 10; To: 11"
+    about: "Animation Type:\tForward\r\nAnimation:\tFrom: 12; To: 13"
+  - animationName: damage_d
+    loopTime: 1
+    about: "Animation Type:\tForward\r\nAnimation:\tFrom: 14; To: 14"
   - animationName: run_d
     loopTime: 1
-    about: "Animation Type:\tForward\r\nAnimation:\tFrom: 12; To: 15"
+    about: "Animation Type:\tForward\r\nAnimation:\tFrom: 15; To: 18"
   - animationName: r
     loopTime: 1
-    about: "Animation Type:\tForward\r\nAnimation:\tFrom: 16; To: 17"
+    about: "Animation Type:\tForward\r\nAnimation:\tFrom: 19; To: 20"
+  - animationName: damage_r
+    loopTime: 1
+    about: "Animation Type:\tForward\r\nAnimation:\tFrom: 21; To: 21"
   - animationName: run_r
     loopTime: 1
-    about: "Animation Type:\tForward\r\nAnimation:\tFrom: 18; To: 19"
+    about: "Animation Type:\tForward\r\nAnimation:\tFrom: 22; To: 23"
   atlas: {instanceID: 0}
   importType: 0
   bindType: 0

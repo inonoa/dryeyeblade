@@ -27,7 +27,7 @@ public class GameCycleManager : MonoBehaviour
         
         if(lastHero != null) Destroy(lastHero.gameObject);
         lastHero = Instantiate(heroPrefab);
-        lastHero.OnDie.Subscribe(_ =>
+        lastHero.OnDeath.Subscribe(_ =>
             {
                 enemyGroupsSpawner.StopSpawn();
                 resultScene.Enter();

@@ -11,6 +11,8 @@ public class HeroParams : ScriptableObject
     [SerializeField] float _NormalDamage;
     [SerializeField] float _CoolTime;
     [SerializeField] float _EyeClosedTimeMax;
+    [SerializeField] float _StunTime;
+    [SerializeField] float _KnockBackDistance;
 
     public float SpeedMax   => _SpeedMax;
     public float RunForce   => _RunForce;
@@ -20,6 +22,8 @@ public class HeroParams : ScriptableObject
     public float NormalDamage => _NormalDamage;
     public float CoolTime => _CoolTime;
     public float EyeClosedTimeMax => _EyeClosedTimeMax;
+    public float StunTime => _StunTime;
+    public float KnockBackDistance => _KnockBackDistance;
     
 #if UNITY_EDITOR
     
