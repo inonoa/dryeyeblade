@@ -22,4 +22,5 @@ MonoBehaviour:
   _EyeClosedTimeMax: 3
   _StunTime: 0.7
   _KnockBackDistance: 0.7
+  _EyesOpenToTimeRestart: 0.6
   _DebugMuteki: 0

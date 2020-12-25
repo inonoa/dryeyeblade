@@ -48,10 +48,12 @@ public class Zako : MonoBehaviour, IDamageable, IDoOnTimeStopped
         _WanderDir.Value = Dir8Extension.Random();
     }
 
+    bool seeingHero = false;
     void OnTriggerEnter2D(Collider2D other)
     {
         if(! other.CompareTag("HeroLife")) return;
 
+        seeingHero = true;
         targetHero = other.GetComponentInParent<Hero>();
         
         if (State.Value == EState.Wandering)
@@ -65,7 +67,8 @@ public class Zako : MonoBehaviour, IDamageable, IDoOnTimeStopped
     void OnTriggerExit2D(Collider2D other)
     {
         if(! other.CompareTag("HeroLife")) return;
-        
+
+        seeingHero = false;
         if (State.Value == EState.ChaseHero)
         {
             _State.Value = EState.Wandering;
@@ -92,7 +95,11 @@ public class Zako : MonoBehaviour, IDamageable, IDoOnTimeStopped
             if (attack.CanAttack)
             {
                 attack.Attack()
-                    .Subscribe(_ => _State.Value = EState.ChaseHero);
+                    .Subscribe(_ =>
+                    {
+                        if (seeingHero) _State.Value = EState.ChaseHero;
+                        else            _State.Value = EState.Wandering;
+                    });
                 _State.Value = EState.Attack;
             }
         }
@@ -108,6 +115,7 @@ public class Zako : MonoBehaviour, IDamageable, IDoOnTimeStopped
     public IObservable<Unit> OnDeath => _OnDeath;
     public void Damage(float damage)
     {
+        attack.ForceStopAttack();
         _State.Value = EState.Dead;
         _OnDamaged.OnNext(Unit.Default);
         _OnDeath.OnNext(Unit.Default);

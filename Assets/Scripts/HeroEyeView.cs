@@ -1,4 +1,5 @@
 ﻿using System;
+using DG.Tweening;
 using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
@@ -6,7 +7,7 @@ using UnityEngine.UI;
 public class HeroEyeView : MonoBehaviour
 {
     HeroEye eye;
-    [SerializeField] Image blind;
+    [SerializeField] Animator blindAnim;
     [SerializeField] Slider eyeSlider;
     [SerializeField] HeroParams param;
 
@@ -16,11 +17,23 @@ public class HeroEyeView : MonoBehaviour
         {
             if(hero == null) return;
             eye = hero.Eye;
-            hero.Eye.IsOpen
-                .Subscribe(open => { blind.enabled = !open; })
+            hero.Eye.IsOpen.Skip(1)
+                .Subscribe(open =>
+                {
+                    blindAnim.enabled = true;
+                    blindAnim.Play(open ? "eyeEffect_open" : "eyeEffect_close");
+                    openOrCloseCurrent?.Kill();
+                    openOrCloseCurrent = DOVirtual.DelayedCall
+                    (
+                        blindAnim.GetCurrentAnimatorStateInfo(0).length,
+                        () => blindAnim.enabled = false
+                    );
+                })
                 .AddTo(this);
         });
     }
+
+    Tween openOrCloseCurrent;
 
     void Update()
     {

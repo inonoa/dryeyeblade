@@ -23,16 +23,10 @@ public class HeroAttack : SerializedMonoBehaviour
     {
         this.param = param;
         this.hero = hero;
-        hero.EyesAreOpen
-            .Subscribe(open =>
-            {
-                if(open) OnEyesOpen();
-            })
-            .AddTo(this);
     }
 
     public bool IsAttacking { get; private set; } = false;
-    bool CanAttack => !hero.EyesAreOpen.Value && !IsAttacking;
+    bool CanAttack => hero.Eye.FullyClosed && !IsAttacking;
     
     Subject<Hero> _OnAttack = new Subject<Hero>();
     public IObservable<Hero> OnAttack => _OnAttack;
@@ -58,6 +52,8 @@ public class HeroAttack : SerializedMonoBehaviour
                 ));
             })
             .AddTo(this);
+
+        EnemiesTimeChanger.Current.OnTimeRestarted.Subscribe(_ => ApplyAllHits());
     }
 
     void Attack()
@@ -78,7 +74,7 @@ public class HeroAttack : SerializedMonoBehaviour
         _OnAttackFinished.OnNext(Unit.Default);
     }
 
-    void OnEyesOpen()
+    void ApplyAllHits()
     {
         hits.ForEach(hit =>
         {

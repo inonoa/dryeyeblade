@@ -34,9 +34,14 @@ public class ZakoView : MonoBehaviour, IDoOnTimeStopped
                     animator.Play("slime_attack_" + DirToStateStr(zako.RunDir.ToDir8()));
                     DOVirtual.DelayedCall(1.6f, () =>
                     {
+                        if(zako.State.Value != Zako.EState.Attack) return;
+                        
                         var effect = Instantiate(effectPrefab, this.transform.position, Quaternion.identity);
+                        onTimeStopped.Subscribe(_ => effect.DOPause()).AddTo(effect);
+                        onTimeRestarted.Subscribe(_ => effect.DOTogglePause()).AddTo(effect);
                         DOVirtual.DelayedCall(2f, () => Destroy(effect.gameObject));
-                    });
+                    })
+                    .ReactsToHeroEye();
                     break;
                 case Zako.EState.Dead:
                     break;
@@ -74,14 +79,18 @@ public class ZakoView : MonoBehaviour, IDoOnTimeStopped
         onEnd.Invoke();
     }
 
+    Subject<Unit> onTimeStopped = new Subject<Unit>();
     public void OnTimeStopped()
     {
         animator.enabled = false;
+        onTimeStopped.OnNext(Unit.Default);
     }
 
+    Subject<Unit> onTimeRestarted = new Subject<Unit>();
     public void OnTimeRestarted()
     {
         animator.enabled = true;
+        onTimeRestarted.OnNext(Unit.Default);
     }
 
     static string DirToStateStr(Dir8 dir)

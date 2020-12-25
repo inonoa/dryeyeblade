@@ -15,7 +15,7 @@ public class ScoreView : MonoBehaviour
         counter.Score.Subscribe(score =>
         {
             if (score == 0) scoreText.text = "0";
-            else            scoreText.DOCounter(lastScore, score, 1f);
+            else            scoreText.DOCounter(lastScore, score, 1f).SetEase(Ease.OutExpo);
         });
     }
 }

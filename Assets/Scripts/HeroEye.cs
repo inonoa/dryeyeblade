@@ -1,4 +1,5 @@
 ﻿using System;
+using DG.Tweening;
 using UniRx;
 using UnityEngine;
 
@@ -8,6 +9,8 @@ public class HeroEye : MonoBehaviour
     
     ReactiveProperty<bool> _IsOpen = new ReactiveProperty<bool>(true);
     public IReadOnlyReactiveProperty<bool> IsOpen => _IsOpen;
+
+    public bool FullyClosed { get; private set; } = false;
 
     public float SecondsFromOpen{ get; private set; } = 100;
     public float SecondsFromClose{ get; private set; } = 0;
@@ -46,11 +49,14 @@ public class HeroEye : MonoBehaviour
     {
         _IsOpen.Value = false;
         SecondsFromClose = 0;
+
+        DOVirtual.DelayedCall(0.3f, () => FullyClosed = true);
     }
 
     void Open()
     {
         _IsOpen.Value = true;
         SecondsFromOpen = 0;
+        FullyClosed = false;
     }
 }

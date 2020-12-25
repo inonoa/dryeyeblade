@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using DG.Tweening;
 using UniRx;
 using UniRx.Triggers;
@@ -9,7 +10,6 @@ public class ZakoAttack : MonoBehaviour
 {
     [FormerlySerializedAs("collider")] [SerializeField] Collider2D attackCollider;
     [SerializeField] Collider2D sensor;
-    [SerializeField] Animator effectPrefab;
 
     Hero target;
     
@@ -37,17 +37,28 @@ public class ZakoAttack : MonoBehaviour
             .AddTo(this);
     }
 
+    List<Tween> tweensInAttack = new List<Tween>();
+    Subject<Unit> currentAttackEnded;
     public IObservable<Unit> Attack()
     {
+        tweensInAttack = new List<Tween>();
+        
         isAttacking = true;
-        Subject<Unit> onFinished = new Subject<Unit>();
+        currentAttackEnded = new Subject<Unit>();
 
-        //blind対応
-        DOVirtual.DelayedCall(1.5f, () => attackCollider.enabled = true);
-        DOVirtual.DelayedCall(2.3f, () => attackCollider.enabled = false);
-        DOVirtual.DelayedCall(2.5f, () => onFinished.OnNext(Unit.Default));
-        DOVirtual.DelayedCall(3f,   () => isAttacking = false);
+        tweensInAttack.Add(DOVirtual.DelayedCall(1.5f, () => attackCollider.enabled = true).ReactsToHeroEye());
+        tweensInAttack.Add(DOVirtual.DelayedCall(2.3f, () => attackCollider.enabled = false).ReactsToHeroEye());
+        tweensInAttack.Add(DOVirtual.DelayedCall(2.5f, () => currentAttackEnded.OnNext(Unit.Default)).ReactsToHeroEye());
+        tweensInAttack.Add(DOVirtual.DelayedCall(3f,   () => isAttacking = false).ReactsToHeroEye());
 
-        return onFinished;
+        return currentAttackEnded;
+    }
+
+    public void ForceStopAttack()
+    {
+        tweensInAttack.ForEach(tw => tw.Kill());
+        isAttacking = false;
+        attackCollider.enabled = false;
+        currentAttackEnded?.OnNext(Unit.Default);
     }
 }
