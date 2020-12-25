@@ -27,33 +27,45 @@ ScriptedImporter:
   - animationName: ld
     loopTime: 1
     about: "Animation Type:\tForward\r\nAnimation:\tFrom: 0; To: 1"
+  - animationName: attack_ld
+    loopTime: 1
+    about: "Animation Type:\tForward\r\nAnimation:\tFrom: 2; To: 7"
   - animationName: run_ld
     loopTime: 1
-    about: "Animation Type:\tForward\r\nAnimation:\tFrom: 2; To: 3"
+    about: "Animation Type:\tForward\r\nAnimation:\tFrom: 8; To: 9"
   - animationName: lu
     loopTime: 1
-    about: "Animation Type:\tForward\r\nAnimation:\tFrom: 4; To: 5"
+    about: "Animation Type:\tForward\r\nAnimation:\tFrom: 10; To: 11"
+  - animationName: attack_lu
+    loopTime: 1
+    about: "Animation Type:\tForward\r\nAnimation:\tFrom: 12; To: 17"
   - animationName: run_lu
     loopTime: 1
-    about: "Animation Type:\tForward\r\nAnimation:\tFrom: 6; To: 7"
+    about: "Animation Type:\tForward\r\nAnimation:\tFrom: 18; To: 19"
   - animationName: damage_l
     loopTime: 1
-    about: "Animation Type:\tForward\r\nAnimation:\tFrom: 8; To: 8"
+    about: "Animation Type:\tForward\r\nAnimation:\tFrom: 20; To: 20"
   - animationName: rd
     loopTime: 1
-    about: "Animation Type:\tForward\r\nAnimation:\tFrom: 9; To: 10"
+    about: "Animation Type:\tForward\r\nAnimation:\tFrom: 21; To: 22"
+  - animationName: attack_rd
+    loopTime: 1
+    about: "Animation Type:\tForward\r\nAnimation:\tFrom: 23; To: 28"
   - animationName: run_rd
     loopTime: 1
-    about: "Animation Type:\tForward\r\nAnimation:\tFrom: 11; To: 12"
+    about: "Animation Type:\tForward\r\nAnimation:\tFrom: 29; To: 30"
   - animationName: ru
     loopTime: 1
-    about: "Animation Type:\tForward\r\nAnimation:\tFrom: 13; To: 14"
+    about: "Animation Type:\tForward\r\nAnimation:\tFrom: 31; To: 32"
   - animationName: run_ru
     loopTime: 1
-    about: "Animation Type:\tForward\r\nAnimation:\tFrom: 15; To: 16"
+    about: "Animation Type:\tForward\r\nAnimation:\tFrom: 33; To: 34"
+  - animationName: attack_ru
+    loopTime: 1
+    about: "Animation Type:\tForward\r\nAnimation:\tFrom: 35; To: 40"
   - animationName: damage_r
     loopTime: 1
-    about: "Animation Type:\tForward\r\nAnimation:\tFrom: 17; To: 17"
+    about: "Animation Type:\tForward\r\nAnimation:\tFrom: 41; To: 41"
   atlas: {instanceID: 0}
   importType: 0
   bindType: 0

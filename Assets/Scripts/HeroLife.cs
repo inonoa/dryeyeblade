@@ -19,7 +19,7 @@ public class HeroLife : MonoBehaviour
         _Life = new ReactiveProperty<int>(_LifeMax);
     }
 
-    void OnTriggerEnter2D(Collider2D other)
+    void OnTriggerStay2D(Collider2D other)
     {
         if(! other.CompareTag("EnemyAttack")) return;
         if(Life.Value == 0) return;

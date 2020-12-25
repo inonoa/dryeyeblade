@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Linq;
+using DG.Tweening;
 using UniRx;
 using UnityEngine;
 
@@ -9,89 +10,52 @@ public class ZakoView : MonoBehaviour, IDoOnTimeStopped
     [SerializeField] Zako zako;
     [SerializeField] Animator animator;
     [SerializeField] SpriteRenderer spriteRenderer;
+    [SerializeField] Animator effectPrefab;
 
     void Start()
     {
         zako.WanderDirSet
-            .Where(dir => zako.State == Zako.EState.Wandering)
-            .Subscribe(dir =>
-            {
-                switch (dir)
-                {
-                    case Dir8.None:
-                        break;
-                    case Dir8.R:
-                        animator.Play("slime_rd");
-                        break;
-                    case Dir8.RU:
-                        animator.Play("slime_ru");
-                        break;
-                    case Dir8.U:
-                        animator.Play("slime_ru");
-                        break;
-                    case Dir8.LU:
-                        animator.Play("slime_lu");
-                        break;
-                    case Dir8.L:
-                        animator.Play("slime_ld");
-                        break;
-                    case Dir8.LD:
-                        animator.Play("slime_ld");
-                        break;
-                    case Dir8.D:
-                        animator.Play("slime_ld");
-                        break;
-                    case Dir8.RD:
-                        animator.Play("slime_rd");
-                        break;
-                    default:
-                        throw new ArgumentOutOfRangeException(nameof(dir), dir, null);
-                }
-            });
+            .Where(dir => zako.State.Value == Zako.EState.Wandering)
+            .Subscribe(dir => animator.Play("slime_" + DirToStateStr(dir)));
 
         zako.OnDamaged.Subscribe(_ => StartCoroutine(Blink(onEnd: () => zako.OnDamageDisplayEnded())));
+
+        zako.State.Subscribe(state =>
+        {
+            switch (state)
+            {
+                case Zako.EState.Wandering:
+                    animator.Play("slime_" + DirToStateStr(zako.WanderDir));
+                    break;
+                case Zako.EState.ChaseHero:
+                    animator.Play("slime_run_" + DirToStateStr(zako.RunDir.ToDir8()));
+                    break;
+                case Zako.EState.Attack:
+                    animator.Play("slime_attack_" + DirToStateStr(zako.RunDir.ToDir8()));
+                    DOVirtual.DelayedCall(1.6f, () =>
+                    {
+                        var effect = Instantiate(effectPrefab, this.transform.position, Quaternion.identity);
+                        DOVirtual.DelayedCall(2f, () => Destroy(effect.gameObject));
+                    });
+                    break;
+                case Zako.EState.Dead:
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(state), state, null);
+            }
+        });
     }
 
     Dir8 chaseDirLast = Dir8.None;
     void Update()
     {
-        if(zako.State != Zako.EState.ChaseHero) return;
+        if(zako.State.Value != Zako.EState.ChaseHero) return;
 
         var runDir = zako.RunDir.ToDir8();
         if (runDir != chaseDirLast)
         {
             chaseDirLast = runDir;
-            switch (runDir)
-            {
-                case Dir8.None:
-                    break;
-                case Dir8.R:
-                    animator.Play("slime_run_rd");
-                    break;
-                case Dir8.RU:
-                    animator.Play("slime_run_ru");
-                    break;
-                case Dir8.U:
-                    animator.Play("slime_run_ru");
-                    break;
-                case Dir8.LU:
-                    animator.Play("slime_run_lu");
-                    break;
-                case Dir8.L:
-                    animator.Play("slime_run_ld");
-                    break;
-                case Dir8.LD:
-                    animator.Play("slime_run_ld");
-                    break;
-                case Dir8.D:
-                    animator.Play("slime_run_ld");
-                    break;
-                case Dir8.RD:
-                    animator.Play("slime_run_rd");
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(runDir), runDir, null);
-            }
+            animator.Play("slime_run_" + DirToStateStr(runDir));
         }
     }
     
@@ -118,5 +82,21 @@ public class ZakoView : MonoBehaviour, IDoOnTimeStopped
     public void OnTimeRestarted()
     {
         animator.enabled = true;
+    }
+
+    static string DirToStateStr(Dir8 dir)
+    {
+        switch (dir)
+        {
+            case Dir8.R:  return "rd";
+            case Dir8.RU: return "ru";
+            case Dir8.U:  return "ru";
+            case Dir8.LU: return "lu"; 
+            case Dir8.L:  return "ld"; 
+            case Dir8.LD: return "ld";
+            case Dir8.D:  return "ld";
+            case Dir8.RD: return "rd"; 
+            default: throw new ArgumentOutOfRangeException(nameof(dir), dir, null);
+        }
     }
 }

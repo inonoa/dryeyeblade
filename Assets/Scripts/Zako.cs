@@ -11,9 +11,10 @@ using Random = UnityEngine.Random;
 public class Zako : MonoBehaviour, IDamageable, IDoOnTimeStopped
 {
     public enum EState{ Wandering, ChaseHero, Attack, Dead }
-    [SerializeField, ReadOnly] EState state = EState.Wandering;
-    public EState State => state;
     
+    ReactiveProperty<EState> _State = new ReactiveProperty<EState>(EState.Wandering);
+    public IReadOnlyReactiveProperty<EState> State => _State;
+
     ReactiveProperty<Dir8> _WanderDir = new ReactiveProperty<Dir8>();
     public Dir8 WanderDir => _WanderDir.Value;
     public IObservable<Dir8> WanderDirSet => _WanderDir;
@@ -36,7 +37,7 @@ public class Zako : MonoBehaviour, IDamageable, IDoOnTimeStopped
             Random.Range(0, 2f),
             () => Observable
                   .Interval(TimeSpan.FromSeconds(2))
-                  .Where(_ => state == EState.Wandering)
+                  .Where(_ => State.Value == EState.Wandering)
                   .Subscribe(_ => ChangeDir())
                   .AddTo(this)
         );
@@ -49,22 +50,25 @@ public class Zako : MonoBehaviour, IDamageable, IDoOnTimeStopped
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        if(! other.CompareTag("Hero")) return;
+        if(! other.CompareTag("HeroLife")) return;
 
         targetHero = other.GetComponentInParent<Hero>();
         
-        if (state == EState.Wandering)
+        if (State.Value == EState.Wandering)
         {
-            state = EState.ChaseHero;
+            Vector2 thisToHero = targetHero.transform.position - this.transform.position;
+            RunDir = thisToHero.normalized;
+            
+            _State.Value = EState.ChaseHero;
         }
     }
     void OnTriggerExit2D(Collider2D other)
     {
-        if(! other.CompareTag("Hero")) return;
+        if(! other.CompareTag("HeroLife")) return;
         
-        if (state == EState.ChaseHero)
+        if (State.Value == EState.ChaseHero)
         {
-            state = EState.Wandering;
+            _State.Value = EState.Wandering;
         }
     }
     
@@ -72,7 +76,7 @@ public class Zako : MonoBehaviour, IDamageable, IDoOnTimeStopped
     public Vector2 RunDir { get; private set; }
     void FixedUpdate()
     {
-        switch (state)
+        switch (State.Value )
         {
         case EState.Wandering:
         {
@@ -88,9 +92,8 @@ public class Zako : MonoBehaviour, IDamageable, IDoOnTimeStopped
             if (attack.CanAttack)
             {
                 attack.Attack()
-                    .Delay(TimeSpan.FromSeconds(1))
-                    .Subscribe(_ => state = EState.ChaseHero);
-                state = EState.Attack;
+                    .Subscribe(_ => _State.Value = EState.ChaseHero);
+                _State.Value = EState.Attack;
             }
         }
         break;
@@ -105,7 +108,7 @@ public class Zako : MonoBehaviour, IDamageable, IDoOnTimeStopped
     public IObservable<Unit> OnDeath => _OnDeath;
     public void Damage(float damage)
     {
-        state = EState.Dead;
+        _State.Value = EState.Dead;
         _OnDamaged.OnNext(Unit.Default);
         _OnDeath.OnNext(Unit.Default);
     }

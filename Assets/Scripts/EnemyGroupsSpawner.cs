@@ -18,6 +18,10 @@ public class EnemyGroupsSpawner : MonoBehaviour, IDoOnTimeStopped
     [SerializeField] int spawnSourcesBandWidth;
     [SerializeField] int WhenSpawnSourcesBandStartToSlide;
     [SerializeField] int WhenSpawnSourcesBandEndSliding;
+    
+#if UNITY_EDITOR
+    [SerializeField] bool debugSpawns = true;
+#endif
 
     IEnumerator currentSpawns;
     
@@ -37,7 +41,6 @@ public class EnemyGroupsSpawner : MonoBehaviour, IDoOnTimeStopped
         {
             Destroy(childGroup.gameObject);
         }
-        
         currentSpawns = Spawn(groupSources);
         StartCoroutine(currentSpawns);
     }
@@ -50,16 +53,22 @@ public class EnemyGroupsSpawner : MonoBehaviour, IDoOnTimeStopped
         
         while(true)
         {
-            float timeNormalized = Mathf.InverseLerp
-            (
-                WhenSpawnSourcesBandStartToSlide,
-                WhenSpawnSourcesBandEndSliding,
-                time
-            );
-            int indexMin = (int) Mathf.Lerp(0, spawns.Length - spawnSourcesBandWidth, timeNormalized);
-            int indexMax = indexMin + spawnSourcesBandWidth - 1;
-            int nextIndex = Random.Range(indexMin, indexMax + 1);
-            _Spawned.OnNext(Instantiate(spawns[nextIndex], transform));
+            
+#if UNITY_EDITOR
+            if (debugSpawns)
+#endif
+            {
+                float timeNormalized = Mathf.InverseLerp
+                (
+                    WhenSpawnSourcesBandStartToSlide,
+                    WhenSpawnSourcesBandEndSliding,
+                    time
+                );
+                int indexMin = (int) Mathf.Lerp(0, spawns.Length - spawnSourcesBandWidth, timeNormalized);
+                int indexMax = indexMin + spawnSourcesBandWidth - 1;
+                int nextIndex = Random.Range(indexMin, indexMax + 1);
+                _Spawned.OnNext(Instantiate(spawns[nextIndex], transform));
+            }
 
             float intervalMin = Mathf.Clamp(Mathf.Lerp(intervalAt0s.min, intervalAt100s.min, time / 100), 3, 100);
             float intervalMax = Mathf.Clamp(Mathf.Lerp(intervalAt0s.max, intervalAt100s.max, time / 100), 3, 100);

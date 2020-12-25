@@ -2872,25 +2872,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   groupSources:
-  - {fileID: 5912419640143310769, guid: 1bad4a12af15d0844a1995d5d647d4f5, type: 3}
-  - {fileID: 5912419640143310769, guid: 1bad4a12af15d0844a1995d5d647d4f5, type: 3}
-  - {fileID: 5912419640143310769, guid: 1bad4a12af15d0844a1995d5d647d4f5, type: 3}
-  - {fileID: 5912419640143310769, guid: 1bad4a12af15d0844a1995d5d647d4f5, type: 3}
-  - {fileID: 5912419640143310769, guid: 1bad4a12af15d0844a1995d5d647d4f5, type: 3}
-  - {fileID: 5912419640143310769, guid: 1bad4a12af15d0844a1995d5d647d4f5, type: 3}
-  - {fileID: 5912419640143310769, guid: 1bad4a12af15d0844a1995d5d647d4f5, type: 3}
-  - {fileID: 5912419640143310769, guid: 1bad4a12af15d0844a1995d5d647d4f5, type: 3}
-  - {fileID: 5912419640143310769, guid: 1bad4a12af15d0844a1995d5d647d4f5, type: 3}
-  - {fileID: 5912419640143310769, guid: 1bad4a12af15d0844a1995d5d647d4f5, type: 3}
+  - {fileID: 2499475146053156828, guid: 091bf201523d91243b1d4f69fbb233f3, type: 3}
   intervalAt0s:
     min: 10
     max: 20
   intervalAt100s:
     min: 5
     max: 10
-  spawnSourcesBandWidth: 5
+  spawnSourcesBandWidth: 1
   WhenSpawnSourcesBandStartToSlide: 30
   WhenSpawnSourcesBandEndSliding: 100
+  debugSpawns: 1
 --- !u!1 &1369194176
 GameObject:
   m_ObjectHideFlags: 0

@@ -5,8 +5,8 @@ TagManager:
   serializedVersion: 2
   tags:
   - Damageable
-  - Hero
   - EnemyAttack
+  - HeroLife
   layers:
   - Default
   - TransparentFX
