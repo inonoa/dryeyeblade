@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 60889fba7eab45179e54fef5a0d84f87, type: 3}
   m_Name: HeroParams
   m_EditorClassIdentifier: 
-  _SpeedMax: 3
+  _SpeedMax: 4
   _RunForce: 50
   _Resistance: 30
   _EyeKey: 122

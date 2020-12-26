@@ -132,4 +132,9 @@ public class Hero : MonoBehaviour
     
     static ReactiveProperty<Hero> _Current = new ReactiveProperty<Hero>();
     public static IReadOnlyReactiveProperty<Hero> Current => _Current;
+
+    void OnDestroy()
+    {
+        if(Current.Value == this) _Current.Value = null;
+    }
 }
