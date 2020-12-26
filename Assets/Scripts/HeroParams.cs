@@ -14,6 +14,7 @@ public class HeroParams : ScriptableObject
     [SerializeField] float _StunTime;
     [SerializeField] float _KnockBackDistance;
     [SerializeField] float _EyesOpenToTimeRestart;
+    [SerializeField] float _AttackSeconds;
 
     public float SpeedMax   => _SpeedMax;
     public float RunForce   => _RunForce;
@@ -26,6 +27,7 @@ public class HeroParams : ScriptableObject
     public float StunTime => _StunTime;
     public float KnockBackDistance => _KnockBackDistance;
     public float EyesOpenToTimeRestart => _EyesOpenToTimeRestart;
+    public float AttackSeconds => _AttackSeconds;
     
 #if UNITY_EDITOR
     

@@ -25,28 +25,28 @@ ScriptedImporter:
     tileOffset: {x: 0, y: 0}
   animationSettings:
   - animationName: ru
-    loopTime: 1
+    loopTime: 0
     about: "Animation Type:\tForward\r\nAnimation:\tFrom: 0; To: 4"
   - animationName: rd
-    loopTime: 1
+    loopTime: 0
     about: "Animation Type:\tForward\r\nAnimation:\tFrom: 5; To: 9"
   - animationName: ld
-    loopTime: 1
+    loopTime: 0
     about: "Animation Type:\tForward\r\nAnimation:\tFrom: 10; To: 14"
   - animationName: lu
-    loopTime: 1
+    loopTime: 0
     about: "Animation Type:\tForward\r\nAnimation:\tFrom: 15; To: 19"
   - animationName: r
-    loopTime: 1
+    loopTime: 0
     about: "Animation Type:\tForward\r\nAnimation:\tFrom: 20; To: 24"
   - animationName: d
-    loopTime: 1
+    loopTime: 0
     about: "Animation Type:\tForward\r\nAnimation:\tFrom: 25; To: 29"
   - animationName: l
-    loopTime: 1
+    loopTime: 0
     about: "Animation Type:\tForward\r\nAnimation:\tFrom: 30; To: 34"
   - animationName: u
-    loopTime: 1
+    loopTime: 0
     about: "Animation Type:\tForward\r\nAnimation:\tFrom: 35; To: 39"
   atlas: {instanceID: 0}
   importType: 0

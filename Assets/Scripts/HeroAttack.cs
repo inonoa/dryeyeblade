@@ -61,7 +61,7 @@ public class HeroAttack : SerializedMonoBehaviour
         IsAttacking = true;
         collier.enabled = true;
         collier.transform.rotation = Quaternion.Euler(0, 0, hero.EyeDirection.Value.ToAngleDeg());
-        DOVirtual.DelayedCall(0.3f, FinishAttack);
+        DOVirtual.DelayedCall(param.AttackSeconds, FinishAttack);
         _OnAttack.OnNext(hero);
     }
 

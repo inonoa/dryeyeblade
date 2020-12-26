@@ -194,7 +194,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   attackCollider: {fileID: 2112352937305848657}
   sensor: {fileID: 7325952444460183804}
-  effectPrefab: {fileID: 0}
+  rigidBody: {fileID: 878676241292221885}
+  attackMoveDistance: 0.7
 --- !u!1 &5385611620622717102
 GameObject:
   m_ObjectHideFlags: 0

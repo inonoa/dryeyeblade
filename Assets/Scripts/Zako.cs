@@ -79,7 +79,7 @@ public class Zako : MonoBehaviour, IDamageable, IDoOnTimeStopped
     public Vector2 RunDir { get; private set; }
     void FixedUpdate()
     {
-        switch (State.Value )
+        switch (State.Value)
         {
         case EState.Wandering:
         {
@@ -94,7 +94,7 @@ public class Zako : MonoBehaviour, IDamageable, IDoOnTimeStopped
 
             if (attack.CanAttack)
             {
-                attack.Attack()
+                attack.Attack(RunDir.ToDir8())
                     .Subscribe(_ =>
                     {
                         if (seeingHero) _State.Value = EState.ChaseHero;

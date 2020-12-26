@@ -23,4 +23,5 @@ MonoBehaviour:
   _StunTime: 0.7
   _KnockBackDistance: 0.7
   _EyesOpenToTimeRestart: 0.6
+  _AttackSeconds: 0.2
   _DebugMuteki: 0

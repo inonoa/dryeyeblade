@@ -10,6 +10,8 @@ public class ZakoAttack : MonoBehaviour, IDoOnTimeStopped
 {
     [FormerlySerializedAs("collider")] [SerializeField] Collider2D attackCollider;
     [SerializeField] Collider2D sensor;
+    [SerializeField] Rigidbody2D rigidBody;
+    [SerializeField] float attackMoveDistance;
 
     Hero target;
     
@@ -39,14 +41,23 @@ public class ZakoAttack : MonoBehaviour, IDoOnTimeStopped
 
     List<Tween> tweensInAttack = new List<Tween>();
     Subject<Unit> currentAttackEnded;
-    public IObservable<Unit> Attack()
+    public IObservable<Unit> Attack(Dir8 dir)
     {
         tweensInAttack = new List<Tween>();
         
         isAttacking = true;
         currentAttackEnded = new Subject<Unit>();
 
-        tweensInAttack.Add(DOVirtual.DelayedCall(1.5f, () => attackCollider.enabled = true).ReactsToHeroEye());
+        tweensInAttack.Add(DOVirtual.DelayedCall(1f, () =>
+        {
+            tweensInAttack.Add
+            (
+                rigidBody.DOMove(dir.ToVec2() * attackMoveDistance, 0.5f)
+                    .SetRelative()
+                    .SetEase(Ease.Linear)
+            );
+        }));
+        tweensInAttack.Add(DOVirtual.DelayedCall(1.6f, () => attackCollider.enabled = true).ReactsToHeroEye());
         tweensInAttack.Add(DOVirtual.DelayedCall(2.3f, () => attackCollider.enabled = false).ReactsToHeroEye());
         tweensInAttack.Add(DOVirtual.DelayedCall(2.5f, () => currentAttackEnded.OnNext(Unit.Default)).ReactsToHeroEye());
         tweensInAttack.Add(DOVirtual.DelayedCall(3f,   () => isAttacking = false).ReactsToHeroEye());
