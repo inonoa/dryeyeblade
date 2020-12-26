@@ -47,7 +47,6 @@ public class Hero : MonoBehaviour
     void Awake()
     {
         attack.Init(this, param);
-        _Current.Value = this;
 
         ReactiveProperty<Dir8> eyeDir = new ReactiveProperty<Dir8>(Dir8.D);
         KeyDirection
@@ -80,6 +79,8 @@ public class Hero : MonoBehaviour
                 .OnComplete(() => _State.Value = EState.Normal);
             _State.Value = EState.Damaged;
         });
+        
+        _Current.Value = this;
     }
 
     void Update()
@@ -130,5 +131,4 @@ public class Hero : MonoBehaviour
     
     static ReactiveProperty<Hero> _Current = new ReactiveProperty<Hero>();
     public static IObservable<Hero> CurrentSet => _Current;
-    public static Hero Current => _Current.Value;
 }

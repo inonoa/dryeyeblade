@@ -50,3 +50,6 @@ TagManager:
   - name: AttackEffect
     uniqueID: 1031263035
     locked: 0
+  - name: EyeGauge
+    uniqueID: 3374309677
+    locked: 0

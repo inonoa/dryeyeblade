@@ -1,16 +1,41 @@
 ﻿using System;
+using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class HeroLifeView : MonoBehaviour
 {
-    [SerializeField] Text text;
+    [SerializeField] Animator heart1;
+    [SerializeField] Animator heart2;
+    [SerializeField] Animator heart3;
 
-    void Update()
+    void Start()
     {
-        if(Hero.Current is null) return;
-        
-        var life = Hero.Current.Life;
-        text.text = $"LIFE: {life.Life.Value} / {life.LifeMax}";
+        Hero.CurrentSet
+            .Where(hero => hero != null)
+            .DelayFrame(1)
+            .Subscribe(hero =>
+        {
+            hero.Life.Life.Subscribe(val =>
+            {
+                switch (val)
+                {
+                case 3:
+                    heart1.Play("heart_normal");
+                    heart2.Play("heart_normal");
+                    heart3.Play("heart_normal");
+                    break;
+                case 2:
+                    heart3.Play("heart_lost");
+                    break;
+                case 1:
+                    heart2.Play("heart_lost");
+                    break;
+                case 0:
+                    heart1.Play("heart_lost");
+                    break;
+                }
+            });
+        });
     }
 }

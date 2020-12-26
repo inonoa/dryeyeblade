@@ -1,42 +1,60 @@
 ﻿using System;
 using DG.Tweening;
+using Sirenix.OdinInspector;
 using UniRx;
 using UnityEngine;
 
-public class HeroEye : MonoBehaviour
+public class HeroEye : SerializedMonoBehaviour
 {
+    
     [SerializeField] HeroParams param;
     
-    ReactiveProperty<bool> _IsOpen = new ReactiveProperty<bool>(true);
-    public IReadOnlyReactiveProperty<bool> IsOpen => _IsOpen;
+    public enum EState{ Open, Closing, Closed, Opening }
+    [SerializeField, ReadOnly] ReactiveProperty<EState> _State = new ReactiveProperty<EState>(EState.Open);
+    
+    public IReadOnlyReactiveProperty<EState> State => _State;
 
-    public bool FullyClosed { get; private set; } = false;
+    IReadOnlyReactiveProperty<bool> _IsOpen;
+    public IReadOnlyReactiveProperty<bool> IsOpen
+    {
+        get
+        {
+            if (_IsOpen == null)
+            {
+                _IsOpen = State
+                    .Select(state => state == EState.Opening || state == EState.Open)
+                    .ToReadOnlyReactiveProperty(true);
+            }
+            return _IsOpen;
+        }
+    }
+    public bool FullyClosed => State.Value == EState.Closed;
 
-    public float SecondsFromOpen{ get; private set; } = 100;
-    public float SecondsFromClose{ get; private set; } = 0;
+    float secondsFromOpen  = 100;
+    float secondsFromClose = 0;
 
     void Update()
     {
-        if(IsOpen.Value) UpdateOpen();
-        else             UpdateClosed();
+        if(State.Value == EState.Open) UpdateOpen();
+        else if(! IsOpen.Value) UpdateClosed();
     }
 
     void UpdateOpen()
     {
-        SecondsFromOpen += Time.deltaTime;
+        secondsFromOpen += Time.deltaTime;
 
         if (Input.GetKeyDown(param.EyeKey))
         {
-            if(SecondsFromOpen < param.CoolTime) return;
+            if(secondsFromOpen < param.CoolTime) return;
             
             Close();
         }
     }
     void UpdateClosed()
     {
-        SecondsFromClose += Time.deltaTime;
+        secondsFromClose += Time.deltaTime;
 
-        if (SecondsFromClose >= param.EyeClosedTimeMax)
+        if (secondsFromClose >= param.EyeClosedTimeMax)
         {
             Open();
             return;
@@ -47,16 +65,16 @@ public class HeroEye : MonoBehaviour
 
     void Close()
     {
-        _IsOpen.Value = false;
-        SecondsFromClose = 0;
+        _State.Value = EState.Closing;
+        secondsFromClose = 0;
 
-        DOVirtual.DelayedCall(0.3f, () => FullyClosed = true);
+        DOVirtual.DelayedCall(0.3f, () => _State.Value = EState.Closed);
     }
 
     void Open()
     {
-        _IsOpen.Value = true;
-        SecondsFromOpen = 0;
-        FullyClosed = false;
+        _State.Value = EState.Opening;
+        DOVirtual.DelayedCall(param.EyesOpenToTimeRestart, () => _State.Value = EState.Open);
+        secondsFromOpen = 0;
     }
 }

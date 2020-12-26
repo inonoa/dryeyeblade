@@ -6,7 +6,7 @@ using UniRx.Triggers;
 using UnityEngine;
 using UnityEngine.Serialization;
 
-public class ZakoAttack : MonoBehaviour
+public class ZakoAttack : MonoBehaviour, IDoOnTimeStopped
 {
     [FormerlySerializedAs("collider")] [SerializeField] Collider2D attackCollider;
     [SerializeField] Collider2D sensor;
@@ -60,5 +60,17 @@ public class ZakoAttack : MonoBehaviour
         isAttacking = false;
         attackCollider.enabled = false;
         currentAttackEnded?.OnNext(Unit.Default);
+    }
+
+    bool colliderEnabledBeforeStop = false;
+    public void OnTimeStopped()
+    {
+        colliderEnabledBeforeStop = attackCollider.enabled;
+        attackCollider.enabled = false;
+    }
+
+    public void OnTimeRestarted()
+    {
+        attackCollider.enabled = colliderEnabledBeforeStop;
     }
 }

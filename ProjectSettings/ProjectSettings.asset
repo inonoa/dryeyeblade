@@ -45,7 +45,7 @@ PlayerSettings:
   defaultScreenWidth: 1024
   defaultScreenHeight: 768
   defaultScreenWidthWeb: 960
-  defaultScreenHeightWeb: 600
+  defaultScreenHeightWeb: 540
   m_StereoRenderingPath: 0
   m_ActiveColorSpace: 0
   m_MTRendering: 1
@@ -547,6 +547,7 @@ PlayerSettings:
   webGLWasmStreaming: 0
   scriptingDefineSymbols:
     1: ODIN_INSPECTOR;ODIN_INSPECTOR_3
+    13: ODIN_INSPECTOR;ODIN_INSPECTOR_3
   platformArchitecture: {}
   scriptingBackend: {}
   il2cppCompilerConfiguration: {}

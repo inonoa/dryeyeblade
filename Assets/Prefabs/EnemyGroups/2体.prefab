@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 8916607076594130287}
   - component: {fileID: 5912419640143310769}
   m_Layer: 0
-  m_Name: EnemyGroup
+  m_Name: "2\u4F53"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -135,7 +135,7 @@ PrefabInstance:
     - target: {fileID: 3947111934771966890, guid: b87af0f9a65c14a4591505315085d09d,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 2.32
+      value: 1.53
       objectReference: {fileID: 0}
     - target: {fileID: 3947111934771966890, guid: b87af0f9a65c14a4591505315085d09d,
         type: 3}
