@@ -41,7 +41,7 @@ public class ScoreView : MonoBehaviour
                     () => scoreInView,
                     SetNumber,
                     score,
-                    1f
+                    Mathf.Sqrt(score - scoreInView) / 10f
                 )
                 .SetEase(Ease.OutExpo);
             }

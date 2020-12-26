@@ -74,14 +74,19 @@ public class HeroAttack : SerializedMonoBehaviour
         _OnAttackFinished.OnNext(Unit.Default);
     }
 
+    Subject<KilledEnemiesInfo> _KilledEnemies = new Subject<KilledEnemiesInfo>();
+    public IObservable<KilledEnemiesInfo> KilledEnemies => _KilledEnemies;
     void ApplyAllHits()
     {
+        List<IDamageable> killed = new List<IDamageable>();
         hits.ForEach(hit =>
         {
-            hit.Target.Damage(param.NormalDamage);
+            bool died = hit.Target.Damage(param.NormalDamage);
+            if(died) killed.Add(hit.Target);
             Instantiate(damageEffectPrefab, hit.HitPos, Quaternion.identity)
                 .Play(hit.AttackDir);
         });
+        _KilledEnemies.OnNext(new KilledEnemiesInfo(killed));
         hits = new List<AttackHitInfo>();
     }
 }
@@ -105,9 +110,23 @@ public class AttackHitInfo
     }
 }
 
+public class KilledEnemiesInfo
+{
+    public readonly IReadOnlyList<IDamageable> enemies;
+    public KilledEnemiesInfo(IReadOnlyList<IDamageable> enemies)
+    {
+        this.enemies = enemies;
+    }
+}
+
 public interface IDamageable
 {
-    void Damage(float damage);
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="damage"></param>
+    /// <returns>死んだかどうか</returns>
+    bool Damage(float damage);
     int Score { get; }
     IObservable<Unit> OnDeath { get; }
 }

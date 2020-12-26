@@ -15,6 +15,7 @@ public class Hero : MonoBehaviour
     [SerializeField] HeroEye eye;
 
     public HeroParams Param => param;
+    public HeroAttack Attack => attack;
     
     public enum EState{ Normal, Attacking, Damaged, Dead }
 
@@ -130,5 +131,5 @@ public class Hero : MonoBehaviour
     public bool CanBeDamaged() => ! (_State.Value == EState.Damaged || _State.Value == EState.Dead);
     
     static ReactiveProperty<Hero> _Current = new ReactiveProperty<Hero>();
-    public static IObservable<Hero> CurrentSet => _Current;
+    public static IReadOnlyReactiveProperty<Hero> Current => _Current;
 }

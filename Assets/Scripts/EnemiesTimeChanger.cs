@@ -11,7 +11,7 @@ public class EnemiesTimeChanger : MonoBehaviour
 
     void Start()
     {
-        Hero.CurrentSet.Subscribe(hero =>
+        Hero.Current.Subscribe(hero =>
         {
             if(hero == null) return;
             hero.Eye.IsOpen.Where(open => open)

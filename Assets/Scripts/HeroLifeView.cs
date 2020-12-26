@@ -11,7 +11,7 @@ public class HeroLifeView : MonoBehaviour
 
     void Start()
     {
-        Hero.CurrentSet
+        Hero.Current
             .Where(hero => hero != null)
             .DelayFrame(1)
             .Subscribe(hero =>

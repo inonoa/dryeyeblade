@@ -113,13 +113,14 @@ public class Zako : MonoBehaviour, IDamageable, IDoOnTimeStopped
     
     Subject<Unit> _OnDeath = new Subject<Unit>();
     public IObservable<Unit> OnDeath => _OnDeath;
-    public void Damage(float damage)
+    public bool Damage(float damage)
     {
-        if(State.Value == EState.Dead) return;
+        if(State.Value == EState.Dead) return false;
         attack.ForceStopAttack();
         _State.Value = EState.Dead;
         _OnDamaged.OnNext(Unit.Default);
         _OnDeath.OnNext(Unit.Default);
+        return true;
     }
 
     /// <summary>

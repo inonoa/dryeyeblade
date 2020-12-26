@@ -12,7 +12,7 @@ public class HeroEyeView : MonoBehaviour
 
     void Awake()
     {
-        Hero.CurrentSet
+        Hero.Current
             .Where(hero => hero != null)
             .Subscribe(hero =>
         {

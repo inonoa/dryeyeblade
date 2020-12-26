@@ -1,24 +1,28 @@
 ﻿using System;
+using System.Linq;
 using Sirenix.OdinInspector;
 using UniRx;
 using UnityEngine;
 
 public class ScoreCounter : MonoBehaviour
 {
-    [SerializeField] EnemyGroupsSpawner enemyGroupsSpawner;
-    
     ReactiveProperty<int> _Score = new ReactiveProperty<int>(0);
     public IReadOnlyReactiveProperty<int> Score => _Score;
 
     void Start()
     {
-        enemyGroupsSpawner.Spawned
-            .SelectMany(group => group.Enemies)
-            .Subscribe(enemy =>
+        Hero.Current.Where(hero => hero != null).Subscribe(hero =>
+        {
+            hero.Attack.KilledEnemies.Subscribe(info =>
             {
-                enemy.OnDeath.Subscribe(_ => _Score.Value += enemy.Score).AddTo(this);
-            })
-            .AddTo(this);
+                _Score.Value += CalcScore(info);
+            });
+        });
+    }
+
+    int CalcScore(KilledEnemiesInfo info)
+    {
+        return info.enemies.Count * info.enemies.Sum(enemy => enemy.Score);
     }
 
     public void Reset() => _Score.Value = 0;
