@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Timers;
 using DG.Tweening;
+using Sirenix.OdinInspector;
 using UniRx;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -22,6 +23,9 @@ public class EnemyGroupsSpawner : MonoBehaviour, IDoOnTimeStopped
 #if UNITY_EDITOR
     [SerializeField] bool debugSpawns = true;
 #endif
+
+    [SerializeField, ReadOnly] int indexMin;
+    [SerializeField, ReadOnly] int indexMax;
 
     IEnumerator currentSpawns;
     
@@ -64,19 +68,20 @@ public class EnemyGroupsSpawner : MonoBehaviour, IDoOnTimeStopped
                     WhenSpawnSourcesBandEndSliding,
                     time
                 );
-                int indexMin = (int) Mathf.Lerp(0, spawns.Length - spawnSourcesBandWidth, timeNormalized);
-                int indexMax = indexMin + spawnSourcesBandWidth - 1;
+                indexMin = (int) Mathf.Lerp(0, spawns.Length - spawnSourcesBandWidth, timeNormalized);
+                indexMax = indexMin + spawnSourcesBandWidth - 1;
                 int nextIndex = Random.Range(indexMin, indexMax + 1);
                 _Spawned.OnNext(Instantiate(spawns[nextIndex], transform));
             }
 
-            float intervalMin = Mathf.Clamp(Mathf.Lerp(intervalAt0s.min, intervalAt100s.min, time / 100), 3, 100);
-            float intervalMax = Mathf.Clamp(Mathf.Lerp(intervalAt0s.max, intervalAt100s.max, time / 100), 3, 100);
+            float intervalMin = Mathf.Clamp(Mathf.LerpUnclamped(intervalAt0s.min, intervalAt100s.min, time / 100), 3, 100);
+            float intervalMax = Mathf.Clamp(Mathf.LerpUnclamped(intervalAt0s.max, intervalAt100s.max, time / 100), intervalMin + 0.5f, 100);
             float nextInterval = Random.Range(intervalMin, intervalMax);
             
             // 場に敵が全くいなくなったら時間を待たずに次を出したい気持ちがある
             float t = 0;
             while ((t += Time.deltaTime) < nextInterval) yield return null;
+            time += nextInterval;
         }
     }
 

@@ -4,13 +4,13 @@ using Sirenix.OdinInspector;
 using UniRx;
 using UnityEngine;
 
-public class HeroEye : SerializedMonoBehaviour
+public class HeroEye : MonoBehaviour
 {
     
     [SerializeField] HeroParams param;
     
     public enum EState{ Open, Closing, Closed, Opening }
-    [SerializeField, ReadOnly] ReactiveProperty<EState> _State = new ReactiveProperty<EState>(EState.Open);
+    ReactiveProperty<EState> _State = new ReactiveProperty<EState>(EState.Open);
     
     public IReadOnlyReactiveProperty<EState> State => _State;
 
