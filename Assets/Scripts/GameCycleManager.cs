@@ -12,6 +12,7 @@ public class GameCycleManager : MonoBehaviour
     [SerializeField] Transform heroSpawnPosition;
     [SerializeField] TitleScene titleScene;
     [SerializeField] ResultScene resultScene;
+    [SerializeField] new AudioSource audio;
 
     Hero lastHero;
 
@@ -32,7 +33,11 @@ public class GameCycleManager : MonoBehaviour
             {
                 enemyGroupsSpawner.StopSpawn();
                 resultScene.Enter();
+                audio.Stop();
             })
             .AddTo(this);
+
+        audio.clip = SoundDatabase.Instance.bgmMain;
+        audio.Play();
     }
 }

@@ -9,6 +9,7 @@ public class HeroMainView : MonoBehaviour
     [SerializeField] Hero hero;
     [SerializeField] Animator animator;
     [SerializeField] SpriteRenderer spriteRenderer;
+    [SerializeField] new AudioSource audio;
 
     Dir8 lastEyeDir = Dir8.D;
 
@@ -53,8 +54,14 @@ public class HeroMainView : MonoBehaviour
         {
             animator.Play(DirToStateDamaged(hero.EyeDirection.Value));
             StartCoroutine(DamageBlink());
+            audio.PlayOneShot(SoundDatabase.Instance.heroDamage);
         })
         .AddTo(this);
+
+        hero.OnDeath.Subscribe(_ =>
+        {
+            audio.PlayOneShot(SoundDatabase.Instance.heroDie);
+        });
     }
 
     IEnumerator DamageBlink()

@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 50ea2680892b432992817f569e99ae1a, type: 3}
+  m_Name: SoundDatabase
+  m_EditorClassIdentifier: 
+  heroRun: {fileID: 0}
+  heroAttack: {fileID: 8300000, guid: f42efa120f41da44d8252b79d70b616f, type: 3}
+  heroAttackHit1: {fileID: 8300000, guid: 3f8e351eebafd9a49b4fba45db49bc6b, type: 3}
+  heroAttackHit2: {fileID: 8300000, guid: 0fd4e1a0585fa894d9c79087901432cd, type: 3}
+  heroAttackHit3: {fileID: 8300000, guid: 5308cb510d6330e4e80dfad5a4c5655a, type: 3}
+  heroDamage: {fileID: 8300000, guid: 0fd4e1a0585fa894d9c79087901432cd, type: 3}
+  heroDie: {fileID: 0}
+  zakoDamage: {fileID: 8300000, guid: 4cfed691f6a5ff445bc36d3742b25d8a, type: 3}
+  scoreUp: {fileID: 8300000, guid: 70eab0b91c576cb4c8014051fac2d523, type: 3}
+  buttonPushed: {fileID: 0}
+  bgmMain: {fileID: 8300000, guid: 63be810659f5c5542b635d08da3db90f, type: 3}

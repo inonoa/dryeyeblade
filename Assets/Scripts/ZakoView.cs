@@ -4,6 +4,7 @@ using System.Linq;
 using DG.Tweening;
 using UniRx;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class ZakoView : MonoBehaviour, IDoOnTimeStopped
 {
@@ -11,6 +12,7 @@ public class ZakoView : MonoBehaviour, IDoOnTimeStopped
     [SerializeField] Animator animator;
     [SerializeField] SpriteRenderer spriteRenderer;
     [SerializeField] Animator effectPrefab;
+    [SerializeField] new AudioSource audio;
 
     void Start()
     {
@@ -18,7 +20,11 @@ public class ZakoView : MonoBehaviour, IDoOnTimeStopped
             .Where(dir => zako.State.Value == Zako.EState.Wandering)
             .Subscribe(dir => animator.Play("slime_" + DirToStateStr(dir)));
 
-        zako.OnDamaged.Subscribe(_ => StartCoroutine(Blink(onEnd: () => zako.OnDamageDisplayEnded())));
+        zako.OnDamaged.Subscribe(_ =>
+        {
+            DOVirtual.DelayedCall(Random.Range(0, 0.2f), () => audio.PlayOneShot(SoundDatabase.Instance.zakoDamage));
+            StartCoroutine(Blink(onEnd: () => zako.OnDamageDisplayEnded()));
+        });
 
         zako.State.Subscribe(state =>
         {

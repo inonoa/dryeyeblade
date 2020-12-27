@@ -15,6 +15,7 @@ public class ScoreView : MonoBehaviour
     [SerializeField] Image firstDigitImage;
     [SerializeField] Vector3 gap;
     [SerializeField, NativeFixedLength(10)] Sprite[] numberSprites;
+    [SerializeField] new AudioSource audio;
     
     List<Image> numImages = new List<Image>();
     
@@ -36,14 +37,21 @@ public class ScoreView : MonoBehaviour
             }
             else
             {
+                float duration = Mathf.Sqrt(score - scoreInView) / 10f;
                 DOTween.To
                 (
                     () => scoreInView,
                     SetNumber,
                     score,
-                    Mathf.Sqrt(score - scoreInView) / 10f
+                    duration
                 )
-                .SetEase(Ease.OutExpo);
+                .SetEase(Ease.Linear);
+
+                audio.clip = SoundDatabase.Instance.scoreUp;
+                audio.loop = true;
+                audio.volume = 0.6f;
+                DOVirtual.DelayedCall(0.2f,             () => audio.Play());
+                DOVirtual.DelayedCall(duration - 0.05f, () => audio.Stop());
             }
         });
     }

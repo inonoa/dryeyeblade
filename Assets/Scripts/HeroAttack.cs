@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
 using Sirenix.OdinInspector;
+using Sirenix.Utilities;
 using UniRx;
 using UniRx.Triggers;
 using UnityEngine;
@@ -14,7 +15,8 @@ public class HeroAttack : SerializedMonoBehaviour
     //これViewっしょ…………
     [SerializeField] DamageEffect damageEffectPrefab;
     
-    [SerializeField, ReadOnly] List<AttackHitInfo> hits = new List<AttackHitInfo>();
+    ReactiveCollection<AttackHitInfo> _Hits = new ReactiveCollection<AttackHitInfo>();
+    public IReadOnlyReactiveCollection<AttackHitInfo> Hits => _Hits;
 
     HeroParams param;
     Hero hero;
@@ -44,7 +46,7 @@ public class HeroAttack : SerializedMonoBehaviour
             .Where(other => other.CompareTag("Damageable"))
             .Subscribe(other =>
             {
-                hits.Add(new AttackHitInfo
+                _Hits.Add(new AttackHitInfo
                 (
                     other.ClosestPoint(hero.transform.position),
                     hero.EyeDirection.Value,
@@ -79,7 +81,7 @@ public class HeroAttack : SerializedMonoBehaviour
     void ApplyAllHits()
     {
         List<IDamageable> killed = new List<IDamageable>();
-        hits.ForEach(hit =>
+        _Hits.ForEach(hit =>
         {
             bool died = hit.Target.Damage(param.NormalDamage);
             if(died) killed.Add(hit.Target);
@@ -87,7 +89,7 @@ public class HeroAttack : SerializedMonoBehaviour
                 .Play(hit.AttackDir);
         });
         _KilledEnemies.OnNext(new KilledEnemiesInfo(killed));
-        hits = new List<AttackHitInfo>();
+        _Hits.Clear();
     }
 }
 
