@@ -16,6 +16,7 @@ public class ScoreView : MonoBehaviour
     [SerializeField] Vector3 gap;
     [SerializeField, NativeFixedLength(10)] Sprite[] numberSprites;
     [SerializeField] new AudioSource audio;
+    [SerializeField] ScoreIncrementEffect scoreIncrementEffectPrefab;
     
     List<Image> numImages = new List<Image>();
     
@@ -53,6 +54,13 @@ public class ScoreView : MonoBehaviour
                 DOVirtual.DelayedCall(0.2f,             () => audio.Play());
                 DOVirtual.DelayedCall(duration - 0.05f, () => audio.Stop());
             }
+        });
+
+        counter.ScoreAdded.Subscribe(info =>
+        {
+            Vector2 pos = (info.target as MonoBehaviour).transform.position;
+            var effect = Instantiate(scoreIncrementEffectPrefab, pos + new Vector2(0.2f, 0.8f), Quaternion.identity);
+            effect.Init(info.rate * info.target.Score);
         });
     }
 

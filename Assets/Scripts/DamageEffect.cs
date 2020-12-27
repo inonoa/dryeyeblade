@@ -5,6 +5,8 @@ public class DamageEffect : MonoBehaviour
 {
     [SerializeField] Animator animator;
     [SerializeField] Vector2 offset = new Vector2(0.3f, 0.3f);
+    [SerializeField] SpriteRenderer[] spriteRenderers;
+    [SerializeField] Sprite[] numSprites;
     
     public void Play(Dir8 attackDir)
     {

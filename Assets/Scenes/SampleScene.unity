@@ -24040,6 +24040,8 @@ MonoBehaviour:
   - {fileID: -4655000892847293440, guid: 4335a4b6ffa886b489420c1b21692f34, type: 3}
   - {fileID: 5468005609843800588, guid: 4335a4b6ffa886b489420c1b21692f34, type: 3}
   audio: {fileID: 1397781675}
+  scoreIncrementEffectPrefab: {fileID: 3322645496164081429, guid: 712ac9a41e514304ebfd60cc1c292cd1,
+    type: 3}
   scoreInView: 0
 --- !u!82 &1397781675
 AudioSource:

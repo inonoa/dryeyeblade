@@ -36,6 +36,6 @@ public class HeroAttackView : MonoBehaviour
                 default: audio.PlayOneShot(SoundDatabase.Instance.heroAttackHit3); break;
             }
         });
-        attack.KilledEnemies.Subscribe(_ => numhits = 0);
+        attack.KilledEnemies.Subscribe(info => numhits = 0);
     }
 }
