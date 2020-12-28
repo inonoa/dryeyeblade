@@ -8,6 +8,8 @@ using UnityEngine;
 
 public class Hero : MonoBehaviour
 {
+    [SerializeField] bool inTitle = false;
+    public bool InTitle => inTitle;
     [SerializeField] HeroParams param;
     [SerializeField] HeroAttack attack;
     [SerializeField] HeroLife life;
@@ -30,6 +32,7 @@ public class Hero : MonoBehaviour
             .Select(_ => Unit.Default);
 
     public IReadOnlyReactiveProperty<EState> State => _State;
+    public bool IsLive => State.Value != EState.Dead;
 
     public HeroEye Eye => eye;
     public HeroLife Life => life;

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using DG.Tweening;
 using Sirenix.OdinInspector;
 using Sirenix.Utilities;
@@ -36,7 +37,7 @@ public class HeroAttack : SerializedMonoBehaviour
     void Start()
     {
         this.UpdateAsObservable()
-            .Where(_ => Input.GetKeyDown(param.AttackKey))
+            .Where(_ => param.AttackKeys.Any(Input.GetKeyDown))
             .Where(_ => CanAttack)
             .ThrottleFirst(TimeSpan.FromSeconds(0.5f))
             .Subscribe(_ => Attack())

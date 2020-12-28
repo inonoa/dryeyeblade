@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using DG.Tweening;
 using Sirenix.OdinInspector;
 using UniRx;
@@ -8,6 +9,7 @@ public class HeroEye : MonoBehaviour
 {
     
     [SerializeField] HeroParams param;
+    [SerializeField] Hero hero;
     
     public enum EState{ Open, Closing, Closed, Opening }
     ReactiveProperty<EState> _State = new ReactiveProperty<EState>(EState.Open);
@@ -43,8 +45,9 @@ public class HeroEye : MonoBehaviour
     {
         secondsFromOpen += Time.deltaTime;
 
-        if (Input.GetKeyDown(param.EyeKey))
+        if (param.EyeKeys.Any(Input.GetKeyDown))
         {
+            if(!hero.IsLive) return;
             if(secondsFromOpen < param.CoolTime) return;
             
             Close();
@@ -59,8 +62,13 @@ public class HeroEye : MonoBehaviour
             Open();
             return;
         }
+        if (!hero.IsLive)
+        {
+            Open();
+            return;
+        }
 
-        if(Input.GetKeyDown(param.EyeKey)) Open();
+        if(param.EyeKeys.Any(Input.GetKeyDown)) Open();
     }
 
     void Close()

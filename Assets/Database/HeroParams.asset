@@ -15,8 +15,8 @@ MonoBehaviour:
   _SpeedMax: 4
   _RunForce: 50
   _Resistance: 30
-  _EyeKey: 122
-  _AttackKey: 120
+  _EyeKeys: 7a0000002c000000
+  _AttackKeys: 2e00000078000000
   _NormalDamage: 1
   _CoolTime: 2
   _EyeClosedTimeMax: 3

@@ -311,6 +311,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   param: {fileID: 11400000, guid: 7fe0fc4a3d982304aa7a0a2f61b0af31, type: 2}
+  hero: {fileID: 3047888430029443257}
 --- !u!1 &3047888428732004324
 GameObject:
   m_ObjectHideFlags: 0

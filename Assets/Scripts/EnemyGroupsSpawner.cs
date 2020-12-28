@@ -35,8 +35,8 @@ public class EnemyGroupsSpawner : MonoBehaviour, IDoOnTimeStopped
     [Serializable]
     struct MinMaxFloat
     {
-        public float min;
-        public float max;
+        [HorizontalGroup] public float min;
+        [HorizontalGroup] public float max;
     }
 
     public void StartSpawn()
@@ -51,6 +51,9 @@ public class EnemyGroupsSpawner : MonoBehaviour, IDoOnTimeStopped
 
     IEnumerator Spawn(EnemyGroup[] spawns)
     {
+        indexMin = 0;
+        indexMax = 0;
+        
         float time = 0;
 
         while ((time += Time.deltaTime) < 5) yield return null;
@@ -87,20 +90,22 @@ public class EnemyGroupsSpawner : MonoBehaviour, IDoOnTimeStopped
 
     public void StopSpawn()
     {
+        print("StopSpawn");
         StopCoroutine(currentSpawns);
+        currentSpawns = null;
     }
 
     public void OnTimeStopped()
     {
         if(currentSpawns == null) return;
-        
+        print("OnTimeStopped");
         StopCoroutine(currentSpawns);
     }
 
     public void OnTimeRestarted()
     {
         if(currentSpawns == null) return;
-        
+        print("OnTimeRestarted");
         StartCoroutine(currentSpawns);
     }
 }

@@ -21,5 +21,5 @@ MonoBehaviour:
   heroDie: {fileID: 0}
   zakoDamage: {fileID: 8300000, guid: 4cfed691f6a5ff445bc36d3742b25d8a, type: 3}
   scoreUp: {fileID: 8300000, guid: 70eab0b91c576cb4c8014051fac2d523, type: 3}
-  buttonPushed: {fileID: 0}
+  buttonPushed: {fileID: 8300000, guid: 25f19d8b66960ff4db71f49ffb9b063d, type: 3}
   bgmMain: {fileID: 8300000, guid: 63be810659f5c5542b635d08da3db90f, type: 3}
