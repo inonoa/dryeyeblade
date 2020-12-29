@@ -39,6 +39,7 @@ public class HeroAttack : SerializedMonoBehaviour
         this.UpdateAsObservable()
             .Where(_ => param.AttackKeys.Any(Input.GetKeyDown))
             .Where(_ => CanAttack)
+            .Where(_ => hero.AcceptsInput)
             .ThrottleFirst(TimeSpan.FromSeconds(0.5f))
             .Subscribe(_ => Attack())
             .AddTo(this);

@@ -90,7 +90,6 @@ public class EnemyGroupsSpawner : MonoBehaviour, IDoOnTimeStopped
 
     public void StopSpawn()
     {
-        print("StopSpawn");
         StopCoroutine(currentSpawns);
         currentSpawns = null;
     }
@@ -98,14 +97,12 @@ public class EnemyGroupsSpawner : MonoBehaviour, IDoOnTimeStopped
     public void OnTimeStopped()
     {
         if(currentSpawns == null) return;
-        print("OnTimeStopped");
         StopCoroutine(currentSpawns);
     }
 
     public void OnTimeRestarted()
     {
         if(currentSpawns == null) return;
-        print("OnTimeRestarted");
         StartCoroutine(currentSpawns);
     }
 }

@@ -11,7 +11,7 @@ using UnityEngine.UI;
 public class ResultScene : MonoBehaviour
 {
     [SerializeField] ScoreCounter scoreCounter;
-    
+
     [Space(10)]
     [SerializeField] Image BG;
     
@@ -27,6 +27,7 @@ public class ResultScene : MonoBehaviour
     [SerializeField] Animator blind;
 
     [SerializeField, Tooltip("`[score]`でスコアが入るよ"), Multiline] string tweetText;
+    [SerializeField] RankingPopup ranking;
 
     Subject<Unit> _Restart = new Subject<Unit>();
 
@@ -34,13 +35,41 @@ public class ResultScene : MonoBehaviour
     {
         restartButton.OnClickAsObservable()
             .Subscribe(_ => OnRestart());
-        this.UpdateAsObservable()
-            .Where(_ => Input.GetKeyDown(KeyCode.R))
-            .Subscribe(_ => OnRestart());
 
         tweetButton.OnClickAsObservable().Subscribe(_ =>
         {
             Tweet(tweetText.Replace("[score]", scoreCounter.Score.Value.ToString()));
+        });
+
+        rankingButton.OnClickAsObservable().Subscribe(_ =>
+        {
+            Blink();
+            DOVirtual.DelayedCall(0.5f, () =>
+            {
+                BG.gameObject.SetActive(false);
+                scoreViewBody.gameObject.SetActive(false);
+                rankingButton.gameObject.SetActive(false);
+                tweetButton  .gameObject.SetActive(false);
+                restartButton.gameObject.SetActive(false);
+                dead.gameObject.SetActive(false);
+                gameObject.SetActive(false);
+                
+                ranking.Enter(scoreCounter.Score.Value);
+
+                ranking.IsActive.Where(active => !active).Take(1)
+                    .Subscribe(__ =>
+                    {
+                        BG.gameObject.SetActive(true);
+                        scoreViewBody.gameObject.SetActive(true);
+                        rankingButton.gameObject.SetActive(true);
+                        tweetButton  .gameObject.SetActive(true);
+                        restartButton.gameObject.SetActive(true);
+                        dead.gameObject.SetActive(true);
+                        dead.Play("dead_loop", 0, 0);
+                        gameObject.SetActive(true);
+                    });
+            });
+            
         });
     }
 
@@ -65,7 +94,7 @@ public class ResultScene : MonoBehaviour
                 BG.gameObject.SetActive(true);
                 dead.gameObject.SetActive(true);
                 dead.enabled = true;
-                dead.Play("dead_in");
+                dead.Play("dead_in", 0, 0);
             })
             .AppendInterval(4f)
             .AppendCallback(() =>
@@ -93,8 +122,7 @@ public class ResultScene : MonoBehaviour
 
     void OnRestart()
     {
-        blind.enabled = true;
-        blind.Play("eyeEffect_UI_blink", 0, 0);
+        Blink();
         DOVirtual.DelayedCall(0.5f, () =>
         {
             scoreViewBody.OnScoreSet(0);
@@ -107,6 +135,12 @@ public class ResultScene : MonoBehaviour
             gameObject.SetActive(false);
             _Restart.OnNext(Unit.Default);
         });
+    }
+
+    void Blink()
+    {
+        blind.enabled = true;
+        blind.Play("eyeEffect_UI_blink", 0, 0);
     }
 
     public IObservable<Unit> Restart => _Restart;

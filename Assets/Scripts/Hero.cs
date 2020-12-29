@@ -41,12 +41,12 @@ public class Hero : MonoBehaviour
     public IReadOnlyReactiveProperty<Dir8> KeyDirection => _KeyDirection;
     public IReadOnlyReactiveProperty<Dir8> EyeDirection { get; private set; }
 
+    public bool AcceptsInput { get; set; } = true;
+
 
     [SerializeField] Vector2 speed = Vector2.zero;
 
     [SerializeField, ReadOnly] bool canMove = true;
-
-    public IReadOnlyReactiveProperty<bool> EyesAreOpen => eye.IsOpen;
 
     void Awake()
     {
@@ -95,6 +95,7 @@ public class Hero : MonoBehaviour
     void UpdateMove()
     {
         if(!canMove) return;
+        if(!AcceptsInput) return;
         
         float horInput  = Input.GetAxisRaw("Horizontal");
         float vertInput = Input.GetAxisRaw("Vertical");

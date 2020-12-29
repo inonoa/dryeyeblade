@@ -48,6 +48,7 @@ public class HeroEye : MonoBehaviour
         if (param.EyeKeys.Any(Input.GetKeyDown))
         {
             if(!hero.IsLive) return;
+            if(!hero.AcceptsInput) return;
             if(secondsFromOpen < param.CoolTime) return;
             
             Close();
@@ -68,7 +69,11 @@ public class HeroEye : MonoBehaviour
             return;
         }
 
-        if(param.EyeKeys.Any(Input.GetKeyDown)) Open();
+        if (param.EyeKeys.Any(Input.GetKeyDown))
+        {
+            if(!hero.AcceptsInput) return;
+            Open();
+        }
     }
 
     void Close()
