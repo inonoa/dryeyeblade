@@ -42,7 +42,7 @@ public class HeroEyeView : MonoBehaviour
                         ()  => bloom.intensity.value,
                         val => bloom.intensity.value = val,
                         open ? bloomIntensityInOpening : bloomIntensityInClosing,
-                        blindAnim.GetCurrentAnimatorStateInfo(0).length / 2
+                        blindAnim.GetCurrentAnimatorStateInfo(0).length / 3
                     );
                 })
                 .AddTo(this);

@@ -10,6 +10,7 @@ public class HeroMainView : MonoBehaviour
     [SerializeField] Animator animator;
     [SerializeField] SpriteRenderer spriteRenderer;
     [SerializeField] new AudioSource audio;
+    [SerializeField] AudioSource runAudio;
 
     Dir8 lastEyeDir = Dir8.D;
 
@@ -61,6 +62,16 @@ public class HeroMainView : MonoBehaviour
         hero.OnDeath.Subscribe(_ =>
         {
             audio.PlayOneShot(SoundDatabase.Instance.heroDie);
+        });
+
+        IObservable<bool> isRunning = hero.KeyDirection
+            .CombineLatest(hero.State, (keyDir, state) => keyDir != Dir8.None && state == Hero.EState.Normal)
+            .DistinctUntilChanged();
+        isRunning.Subscribe(running =>
+        {
+            runAudio.clip = SoundDatabase.Instance.heroRun;
+            if (running) runAudio.Play();
+            else         runAudio.Stop();
         });
     }
 

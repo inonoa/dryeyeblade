@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 50ea2680892b432992817f569e99ae1a, type: 3}
   m_Name: SoundDatabase
   m_EditorClassIdentifier: 
-  heroRun: {fileID: 0}
+  heroRun: {fileID: 8300000, guid: ac9ad4c711ad33b4890d15e0a74a40a0, type: 3}
   heroAttack: {fileID: 8300000, guid: f42efa120f41da44d8252b79d70b616f, type: 3}
   heroAttackHit1: {fileID: 8300000, guid: 3f8e351eebafd9a49b4fba45db49bc6b, type: 3}
   heroAttackHit2: {fileID: 8300000, guid: 0fd4e1a0585fa894d9c79087901432cd, type: 3}
