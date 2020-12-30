@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Linq;
 using System.Runtime.InteropServices;
 using DG.Tweening;
 using Sirenix.OdinInspector;
+using Sirenix.Utilities;
 using UniRx;
 using UniRx.Triggers;
 using UnityEngine;
@@ -16,8 +18,9 @@ public class ResultScene : MonoBehaviour
     [SerializeField] Image BG;
     
     [SerializeField] Animator dead;
+    [SerializeField] float[] deadSoundDelays;
+    [SerializeField] new AudioSource audio;
     
-    [SerializeField] Image score;
     [SerializeField] ScoreViewBody scoreViewBody;
     
     [SerializeField] Button restartButton;
@@ -95,6 +98,12 @@ public class ResultScene : MonoBehaviour
                 dead.gameObject.SetActive(true);
                 dead.enabled = true;
                 dead.Play("dead_in", 0, 0);
+                float delayLast = 0;
+                deadSoundDelays.ForEach(delay =>
+                {
+                    delayLast += delay;
+                    DOVirtual.DelayedCall(delayLast, () => audio.PlayOneShot(SoundDatabase.Instance.dead, 0.4f));
+                });
             })
             .AppendInterval(4f)
             .AppendCallback(() =>

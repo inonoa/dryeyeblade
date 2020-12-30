@@ -17,6 +17,7 @@ public class ZakoView : MonoBehaviour, IDoOnTimeStopped
     void Start()
     {
         zako.WanderDirSet
+            .SkipLatestValueOnSubscribe()
             .Where(dir => zako.State.Value == Zako.EState.Wandering)
             .Subscribe(dir => animator.Play("slime_" + DirToStateStr(dir)));
 

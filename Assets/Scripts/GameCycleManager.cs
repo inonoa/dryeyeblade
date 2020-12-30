@@ -14,6 +14,7 @@ public class GameCycleManager : MonoBehaviour
     [SerializeField] TitleScene titleScene;
     [SerializeField] ResultScene resultScene;
     [SerializeField] new AudioSource audio;
+    [SerializeField] AudioLowPassFilter lowPassFilter;
     [SerializeField] Animator blind;
     [SerializeField] GameObject IngameUIParent;
     [SerializeField] HeroLifeView heroLifeView;
@@ -33,7 +34,7 @@ public class GameCycleManager : MonoBehaviour
         
         if(lastHero != null) Destroy(lastHero.gameObject);
         lastHero = Instantiate(heroPrefab, heroSpawnPosition.position, Quaternion.identity);
-        lastHero.OnDeath.Subscribe(_ =>
+        lastHero.OnDeath.Delay(TimeSpan.FromSeconds(0.5f)).Subscribe(_ =>
         {
             enemyGroupsSpawner.StopSpawn();
             audio.Stop();
@@ -45,6 +46,14 @@ public class GameCycleManager : MonoBehaviour
 
         audio.clip = SoundDatabase.Instance.bgmMain;
         audio.Play();
+        lastHero.Eye.IsOpen.Subscribe(open =>
+        {
+            float currentTime = audio.time;
+            audio.clip = open ? SoundDatabase.Instance.bgmMain : SoundDatabase.Instance.bgmMainLowPassFiltered;
+            audio.Play();
+            audio.time = currentTime;
+        });
+        
         IngameUIParent.SetActive(true);
         heroLifeView.gameObject.SetActive(true);
     }

@@ -222,8 +222,8 @@ public class RankingPopup : MonoBehaviour
 
     bool IsValidName(string name)
     {
-        if (name.Length == 0) return false;
-        if (name.Length > 11) return false;
+        if (name.Length < 3)  return false;
+        if (name.Length > 10) return false;
         
         return true;
     }

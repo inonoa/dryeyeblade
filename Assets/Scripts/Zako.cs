@@ -15,9 +15,9 @@ public class Zako : MonoBehaviour, IDamageable, IDoOnTimeStopped
     ReactiveProperty<EState> _State = new ReactiveProperty<EState>(EState.Wandering);
     public IReadOnlyReactiveProperty<EState> State => _State;
 
-    ReactiveProperty<Dir8> _WanderDir = new ReactiveProperty<Dir8>();
+    ReactiveProperty<Dir8> _WanderDir = new ReactiveProperty<Dir8>(Dir8.LD);
     public Dir8 WanderDir => _WanderDir.Value;
-    public IObservable<Dir8> WanderDirSet => _WanderDir;
+    public IReadOnlyReactiveProperty<Dir8> WanderDirSet => _WanderDir;
 
     [SerializeField] Rigidbody2D rigidBody;
     [SerializeField] ZakoAttack attack;

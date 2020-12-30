@@ -140,7 +140,8 @@ GameObject:
   - component: {fileID: 3947111934771966889}
   - component: {fileID: 878676241292221885}
   - component: {fileID: 8384023998028590513}
-  m_Layer: 9
+  - component: {fileID: 8804854660282479894}
+  m_Layer: 0
   m_Name: Zako
   m_TagString: Damageable
   m_Icon: {fileID: 0}
@@ -228,6 +229,18 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.6, y: 0.37253278}
   m_EdgeRadius: 0
+--- !u!114 &8804854660282479894
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3947111934771966895}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1899b7cf1c74470b9d4aa092eaba4743, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &4513818223192361620
 GameObject:
   m_ObjectHideFlags: 0

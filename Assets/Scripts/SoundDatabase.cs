@@ -12,10 +12,15 @@ public class SoundDatabase : ScriptableObject
     public AudioClip heroDamage;
     public AudioClip heroDie;
     public AudioClip zakoDamage;
+    public AudioClip bossAttack;
     public AudioClip scoreUp;
     public AudioClip buttonPushed;
+    public AudioClip dead;
 
-    [Space(10)] public AudioClip bgmMain;
+    [Space(10)]
+    public AudioClip bgmMain;
+    public AudioClip bgmMainLowPassFiltered;
+    public AudioClip bgmTitle;
     
     public static SoundDatabase Instance { get; private set; }
     

@@ -27,6 +27,10 @@ public class EnemyGroupsSpawner : MonoBehaviour, IDoOnTimeStopped
     [SerializeField, ReadOnly] int indexMin;
     [SerializeField, ReadOnly] int indexMax;
 
+    [SerializeField] int numInitialSpawns;
+    [SerializeField] int initialSpawnsIndexMin;
+    [SerializeField] int initialSpawnsIndexMax;
+
     IEnumerator currentSpawns;
     
     Subject<EnemyGroup> _Spawned = new Subject<EnemyGroup>();
@@ -45,8 +49,24 @@ public class EnemyGroupsSpawner : MonoBehaviour, IDoOnTimeStopped
         {
             Destroy(childGroup.gameObject);
         }
+#if UNITY_EDITOR
+        if (debugSpawns)
+#endif
+        {
+            InitialSpawns();
+        }
+        
         currentSpawns = Spawn(groupSources);
         StartCoroutine(currentSpawns);
+    }
+
+    void InitialSpawns()
+    {
+        foreach (var _ in Enumerable.Range(0, numInitialSpawns))
+        {
+            int index = Random.Range(initialSpawnsIndexMin, initialSpawnsIndexMax + 1);
+            _Spawned.OnNext(Instantiate(groupSources[index], transform));
+        }
     }
 
     IEnumerator Spawn(EnemyGroup[] spawns)

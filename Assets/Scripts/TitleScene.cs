@@ -14,6 +14,7 @@ public class TitleScene : MonoBehaviour
     [SerializeField] float startDelay = 0.5f;
     [SerializeField] Hero heroInTitle;
     [SerializeField] RankingPopup ranking;
+    [SerializeField] new AudioSource audio;
 
     public IObservable<Unit> StartGame { get; private set; }
 
@@ -30,6 +31,7 @@ public class TitleScene : MonoBehaviour
                 Destroy(heroInTitle.gameObject);
                 this.gameObject.SetActive(false);
                 notOnCanvas.SetActive(false);
+                audio.Stop();
                 startGame.OnNext(Unit.Default);
             });
         });
@@ -56,5 +58,11 @@ public class TitleScene : MonoBehaviour
         {
             heroInTitle.AcceptsInput = !active;
         });
+
+
+        audio.clip = SoundDatabase.Instance.bgmTitle;
+        audio.volume = 0.6f;
+        audio.loop = true;
+        audio.Play();
     }
 }
